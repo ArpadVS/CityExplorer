@@ -18,6 +18,7 @@
 		<kie.version>7.17.0.Final</kie.version>
 		<spring.version>2.3.2.RELEASE</spring.version>
 	</properties>
+	
 	<dependencies>
 	
 		<dependency>
@@ -92,7 +93,7 @@
 		<dependency>
 			<groupId>org.apache.maven.shared</groupId>
 			<artifactId>maven-invoker</artifactId>
-			<version>3.0.0</version>
+			<version>3.1.0</version>
 		</dependency>
 
 		<dependency>
@@ -113,13 +114,13 @@
 			<version>6.5.0.Final</version>
 		</dependency>
 
-		<!-- 
+
         <dependency>
 	  		<groupId>com.sbnz</groupId>
 	  		<artifactId>CityExplorerKJAR</artifactId>
 	  		<type>jar</type>
-	  		<version>1.0-SNAPSHOT</version>	
-  		</dependency> -->
+	  		<version>1.0.0-SNAPSHOT</version>	
+  		</dependency> 
   		
   		<dependency>
 			<groupId>junit</groupId>
@@ -137,11 +138,15 @@
 	</dependencies>
 
 	<build>
+	
+        <pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		
+        </pluginManagement>  
 	</build>
 </project>
