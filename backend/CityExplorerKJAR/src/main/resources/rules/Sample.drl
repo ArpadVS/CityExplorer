@@ -3,5 +3,5 @@ package com.sample
 rule "GoodBye"
     when
     then
-        System.out.println( "Integration works asdf!" );
+        System.out.println( "Integration works ffff!" );
 end

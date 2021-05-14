@@ -60,9 +60,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 			// don't authenticate this particular request
 			.authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/api/**")
 			.permitAll()
-			.antMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/registration","/api/restaraunts/search" )
+			.antMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/registration","/api/activities/search" )
 			.permitAll()
-			.antMatchers(HttpMethod.GET, "/api/restaraunts/", "/api/**").permitAll()
+			.antMatchers(HttpMethod.GET, "/api/activities/", "/api/**").permitAll()
 
 			// all other requests need to be authenticated
 			.anyRequest().authenticated().and()

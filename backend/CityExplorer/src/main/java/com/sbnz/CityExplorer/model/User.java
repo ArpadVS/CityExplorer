@@ -1,5 +1,6 @@
 package com.sbnz.CityExplorer.model;
 
+import java.time.LocalDate;
 import java.util.Collection;
 
 import javax.persistence.Column;
@@ -42,6 +43,9 @@ public abstract class User implements UserDetails {
 
 	@Column
 	private boolean active;
+
+	@Column
+	private LocalDate registrationDate;
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
@@ -142,6 +146,14 @@ public abstract class User implements UserDetails {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public LocalDate getRegistrationDate() {
+		return registrationDate;
+	}
+
+	public void setRegistrationDate(LocalDate registrationDate) {
+		this.registrationDate = registrationDate;
 	}
 
 	@Override

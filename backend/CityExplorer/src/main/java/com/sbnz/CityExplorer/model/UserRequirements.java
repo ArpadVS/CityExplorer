@@ -2,7 +2,6 @@ package com.sbnz.CityExplorer.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class UserRequirements {
