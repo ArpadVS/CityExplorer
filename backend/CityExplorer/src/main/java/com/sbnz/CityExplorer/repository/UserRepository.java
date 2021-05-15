@@ -9,4 +9,5 @@ import com.sbnz.CityExplorer.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	public User findOneByUsername(String username);
+	public User findOneByEmail(String email);
 }

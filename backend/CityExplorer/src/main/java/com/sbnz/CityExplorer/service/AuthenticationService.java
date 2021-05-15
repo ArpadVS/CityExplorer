@@ -7,6 +7,7 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import com.sbnz.CityExplorer.converter.RegistrationDTOConverter;
 import com.sbnz.CityExplorer.dto.LoginDTO;
 import com.sbnz.CityExplorer.dto.RegistrationDTO;
 import com.sbnz.CityExplorer.model.RegisteredUser;
@@ -43,7 +44,19 @@ public class AuthenticationService {
 	}
 	
 	public RegisteredUser register (RegistrationDTO dto) {
-		return new RegisteredUser();
+		//check username
+		if (userRepository.findOneByUsername(dto.getUsername()) != null) {
+			System.out.println("Username taken.");
+			return null;
+		}
+		//check email
+		if (userRepository.findOneByEmail(dto.getEmail()) != null) {
+			System.out.println("Email already exists.");
+			return null;
+		}
+		RegisteredUser u = RegistrationDTOConverter.convertFromDTO(dto);
+		userRepository.save(u);
+		return u;
 	}
 	
 	
