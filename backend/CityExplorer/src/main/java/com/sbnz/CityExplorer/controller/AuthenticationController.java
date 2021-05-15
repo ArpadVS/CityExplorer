@@ -3,6 +3,7 @@ package com.sbnz.CityExplorer.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,8 +25,13 @@ public class AuthenticationController {
 
 	@PostMapping(value = "/login")
 	public  ResponseEntity<TokenDTO> logIn( @RequestBody LoginDTO dto ) {
-		String token = userService.login(dto);
-		return new ResponseEntity<TokenDTO>(new TokenDTO(token), HttpStatus.OK);
+		try {
+			String token = userService.login(dto);
+			return new ResponseEntity<TokenDTO>(new TokenDTO(token), HttpStatus.OK);
+		} catch (BadCredentialsException e) {
+			System.out.println("Bad credentials with username " + dto.getUsername());
+			return new ResponseEntity<TokenDTO>(new TokenDTO(), HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	@PostMapping(value = "/registration")

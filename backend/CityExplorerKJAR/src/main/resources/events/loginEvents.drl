@@ -1,0 +1,66 @@
+package events;
+
+import com.sbnz.CityExplorer.model.*;
+import com.sbnz.CityExplorer.events.BadCredentialsEvent;
+import com.sbnz.CityExplorer.repository.UserRepository;
+
+declare SuspiciousLoginEvent
+    @role(event)
+    @expires(4m)
+    user: User
+    reason: String
+end;
+
+global UserRepository userRepository;
+
+/*
+rule "Test"
+	agenda-group "login"
+	when
+		$e: BadCredentialsEvent()
+	then
+		System.out.println("Failed login detected!");
+end;*/
+
+
+rule "User tries to login with bad password 10 times in 3 minutes - warning"
+    agenda-group "login"
+    salience 50
+    when
+        $event1: BadCredentialsEvent($id: user.getId(), $user: user)
+        Number(intValue >= 10) from accumulate(
+            $event2: BadCredentialsEvent(
+                this != $event1, 
+                user.getId() == $id) over window:time( 3m ),
+            count($event2)
+        )
+        not (SuspiciousLoginEvent(user.getId() == $id))
+    then
+    	String reason = "10 or more failed login attempts in 3 minutes from one user.";
+    	System.out.println("WARNING!!! Suspicous user activity from user " +  $user.getUsername());
+    	System.out.println(reason);
+        insert(new SuspiciousLoginEvent($user, reason));
+end;
+
+
+rule "User tries to login with bad password 10 times in 1 minute - deactivate user"
+    agenda-group "login"
+    salience 100
+    when
+        $event1: BadCredentialsEvent($id: user.getId(), $user: user)
+        Number(intValue >= 10) from accumulate(
+            $event2: BadCredentialsEvent(
+                this != $event1, 
+                user.getId() == $id) over window:time( 1m ),
+            count($event2)
+        )
+        not (SuspiciousLoginEvent(user.getId() == $id))
+    then
+    	$user.setActive(false);
+    	userRepository.save($user);
+    	String reason = "10 or more failed login attempts in 1 minute from one user.";
+    	System.out.println("!!!WARNING!!! POSSIBLE HARMFUL EVENT");
+    	System.out.println("ACCOUNT FOR " +  $user.getUsername() + " IS SUSPENDED");
+    	System.out.println(reason);
+        insert(new SuspiciousLoginEvent($user, reason));
+end;

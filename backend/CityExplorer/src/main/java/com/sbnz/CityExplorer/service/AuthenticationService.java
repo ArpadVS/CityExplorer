@@ -1,5 +1,8 @@
 package com.sbnz.CityExplorer.service;
 
+import java.util.Date;
+
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.sbnz.CityExplorer.converter.RegistrationDTOConverter;
 import com.sbnz.CityExplorer.dto.LoginDTO;
 import com.sbnz.CityExplorer.dto.RegistrationDTO;
+import com.sbnz.CityExplorer.events.BadCredentialsEvent;
 import com.sbnz.CityExplorer.model.RegisteredUser;
 import com.sbnz.CityExplorer.model.User;
 import com.sbnz.CityExplorer.repository.UserRepository;
@@ -35,7 +39,16 @@ public class AuthenticationService {
 					.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
 
 		} catch (BadCredentialsException | InternalAuthenticationServiceException e) {
-			//TO do - login event for bad uname or pw
+			//checking if username exists, so it means pw is wrong
+			User user = userRepository.findOneByUsername(dto.getUsername());
+			if (user != null && user.isActive()) {
+				BadCredentialsEvent failedLogin = new BadCredentialsEvent(user,new Date());
+				KieSession kieSession = droolsService.getEventsSession();	
+				kieSession.getAgenda().getAgendaGroup("login").setFocus();
+				kieSession.setGlobal("userRepository", userRepository);
+				kieSession.insert(failedLogin);
+				kieSession.fireAllRules();
+			}
 			throw new BadCredentialsException("Bad credentials.");
 		}
 		User logged = userRepository.findOneByUsername(dto.getUsername());
@@ -57,6 +70,10 @@ public class AuthenticationService {
 		RegisteredUser u = RegistrationDTOConverter.convertFromDTO(dto);
 		userRepository.save(u);
 		return u;
+	}
+	
+	public static void updateUser(Long id, User u) {
+		
 	}
 	
 	
