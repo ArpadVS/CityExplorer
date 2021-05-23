@@ -1,0 +1,29 @@
+package rules;
+
+import com.sbnz.CityExplorer.model.*;
+
+
+query "User ratings by activity"(Long activityId)
+	$activity: Activity(id == activityId);
+	$ratingSum: Number() from accumulate (
+		Rating( $mark: rating) from $activity.getRatings(),
+		sum($mark));
+	$ratingNum: Number() from accumulate (
+		Rating() from $activity.getRatings(),
+		count(1));
+	$ones: Number() from accumulate (
+		Rating( rating == 1) from $activity.getRatings(),
+		count(1));
+	$twos: Number() from accumulate (
+		Rating( rating == 2) from $activity.getRatings(),
+		count(1));
+	$threes: Number() from accumulate (
+		Rating( rating == 3) from $activity.getRatings(),
+		count(1));
+	$fours: Number() from accumulate (
+		Rating( rating == 4) from $activity.getRatings(),
+		count(1));
+	$fives: Number() from accumulate (
+		Rating( rating == 5) from $activity.getRatings(),
+		count(1));
+end;
