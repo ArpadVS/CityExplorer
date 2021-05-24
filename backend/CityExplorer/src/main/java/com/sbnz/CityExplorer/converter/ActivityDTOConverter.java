@@ -15,7 +15,9 @@ public class ActivityDTOConverter {
 		dto.setId(activity.getId());
 		dto.setName(activity.getName());
 		dto.setDescription(activity.getDescription());
-		dto.setLocation(activity.getLocation().toString());
+		if(activity.getLocation()!= null) {
+			dto.setLocation(activity.getLocation().toString());
+		}
 		dto.setAddress(activity.getAddress());
 		if (activity.getFeatures() != null) {
 			dto.setFeatures(ActivityDTOConverter.convertFeaturesToDTO(activity.getFeatures()));

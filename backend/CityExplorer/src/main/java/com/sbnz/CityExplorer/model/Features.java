@@ -135,7 +135,7 @@ public class Features {
 
 	@Override
 	public String toString() {
-		return "Features [id=" + id + ", parking=" + parking + ", busNearby=" + busNearby + ", reservations="
+		return "Features [parking=" + parking + ", busNearby=" + busNearby + ", reservations="
 				+ reservations + ", wifi=" + wifi + ", tv=" + tv + ", childrensProgram=" + childrensProgram
 				+ ", outdoor=" + outdoor + ", space=" + space + ", price=" + price + ", keywords=" + keywords + "]";
 	}

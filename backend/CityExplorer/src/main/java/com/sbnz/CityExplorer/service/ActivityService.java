@@ -1,6 +1,7 @@
 package com.sbnz.CityExplorer.service;
 
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +21,9 @@ import com.sbnz.CityExplorer.converter.ActivityDTOConverter;
 import com.sbnz.CityExplorer.dto.ActivityDTO;
 import com.sbnz.CityExplorer.dto.ReportDTO;
 import com.sbnz.CityExplorer.dto.SearchDTO;
+import com.sbnz.CityExplorer.dto.UserRequirementsDTO;
 import com.sbnz.CityExplorer.model.Activity;
+import com.sbnz.CityExplorer.model.ActivityRequirements;
 import com.sbnz.CityExplorer.model.Rating;
 import com.sbnz.CityExplorer.model.RegisteredUser;
 import com.sbnz.CityExplorer.repository.ActivityRepository;
@@ -34,9 +37,9 @@ public class ActivityService {
 	UserRepository userRepository;
 	@Autowired
 	DroolsService droolsService;
-	
+
 	public List<ActivityDTO> getAll() {
-		List<Activity> activities =  activityRepository.findAll();
+		List<Activity> activities = activityRepository.findAll();
 		return (activities.stream().map(activity -> {
 			ActivityDTO dto = ActivityDTOConverter.convertToDTO(activity);
 			return dto;
@@ -51,23 +54,23 @@ public class ActivityService {
 
 		ActivityDTO restDTO = null;
 		QueryResults results = kieSession.getQueryResults("User ratings by activity", id);
-		
-		//getting values from query
+
+		// getting values from query
 		for (QueryResultsRow qrr : results) {
 			Activity activity = (Activity) qrr.get("$activity");
-			//total number of ratings
+			// total number of ratings
 			int ratingNum = ((Number) qrr.get("$ratingNum")).intValue();
-			//sum of every rating
+			// sum of every rating
 			int ratingSum = (int) qrr.get("$ratingSum");
-			
-			//total number of 1-2-3-4-5 ratings
+
+			// total number of 1-2-3-4-5 ratings
 			int ones = ((Number) qrr.get("$ones")).intValue();
 			int twos = ((Number) qrr.get("$twos")).intValue();
 			int threes = ((Number) qrr.get("$threes")).intValue();
 			int fours = ((Number) qrr.get("$fours")).intValue();
 			int fives = ((Number) qrr.get("$fives")).intValue();
-			
-			//checking if current user already gave a rating
+
+			// checking if current user already gave a rating
 			int userReview = 0;
 			RegisteredUser loggedUser = getCurrentUser();
 			if (loggedUser != null) {
@@ -78,7 +81,7 @@ public class ActivityService {
 					}
 				}
 			}
-			ReportDTO reportDTO = new ReportDTO(ratingSum/ratingNum, ratingNum, ones, twos, threes, fours, fives,
+			ReportDTO reportDTO = new ReportDTO(ratingSum / ratingNum, ratingNum, ones, twos, threes, fours, fives,
 					userReview);
 			restDTO = ActivityDTOConverter.convertToDTO(activity, reportDTO);
 		}
@@ -100,7 +103,7 @@ public class ActivityService {
 		List<Activity> result = new ArrayList<Activity>();
 		if (!searchDto.getName().equals("")) {
 			InputStream template = ActivityService.class.getResourceAsStream("/search.drt");
-			if(template == null) {
+			if (template == null) {
 				System.out.println("Template is null");
 			}
 			ObjectDataCompiler converter = new ObjectDataCompiler();
@@ -121,5 +124,28 @@ public class ActivityService {
 			ActivityDTO dto = ActivityDTOConverter.convertToDTO(activity);
 			return dto;
 		})).collect(Collectors.toList());
+	}
+
+	public ActivityDTO getRecommendation(UserRequirementsDTO dto) {
+		dto.setDate(LocalDate.now());
+		
+		ActivityRequirements requirements = new ActivityRequirements();
+		List<Activity> previousForLoggedUser = new ArrayList<Activity>();
+		Activity bestScored = new Activity();
+		
+		// getting agenda for processing user info
+		KieSession ks = droolsService.getRulesSession();
+		ks.getAgenda().getAgendaGroup("recommend").setFocus();
+		ks.setGlobal("previousRecommendations", previousForLoggedUser);
+		ks.setGlobal("best", bestScored);
+		ks.insert(dto);
+		ks.insert(requirements);
+		ks.fireAllRules();
+		
+		ActivityDTO retVal= ActivityDTOConverter.convertToDTO((Activity)ks.getGlobal("best"));
+		
+		droolsService.releaseRulesSession();
+
+		return retVal;
 	}
 }

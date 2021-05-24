@@ -1,0 +1,249 @@
+package com.rules;
+import com.sbnz.CityExplorer.model.*;
+import com.sbnz.CityExplorer.dto.UserRequirementsDTO;
+import com.sbnz.CityExplorer.dto.ActivityDTO;
+import java.util.List;
+
+global List<Activity>previousRecommendations;
+global Activity best;
+
+rule "Start"
+    agenda-group "recommend"
+    salience 1000
+    when
+    	UserRequirementsDTO()
+    	ActivityRequirements()
+    	
+    then
+        System.out.println( "Started recommendation!" );
+        //best.setName("changed");
+end
+
+rule "Going with family"
+	salience 100
+	agenda-group "recommend"
+	when
+		userRequirements: UserRequirementsDTO( companion=="FAMILY");
+		activityRequirements: ActivityRequirements();
+	then
+		modify(activityRequirements){getFeatures().getKeywords().add(Keywords.FAMILY_FRIENDLY);};
+		System.out.println(activityRequirements.toString());	
+end;
+
+rule "Family friendly keywords means childrens program"
+	salience 80
+	agenda-group "recommend"
+	no-loop 
+	when
+		activityRequirements: ActivityRequirements( features.keywords  contains Keywords.FAMILY_FRIENDLY);
+	then
+		modify(activityRequirements){getFeatures().setChildrensProgram(true);};
+		System.out.println(activityRequirements.toString());	
+end;
+
+rule "Special occasion with partner"
+	salience 100
+	agenda-group "recommend"
+	when
+		userRequirements: UserRequirementsDTO( special == true && companion == "PARTNER" );
+		activityRequirements: ActivityRequirements();
+	then
+		modify(activityRequirements){getFeatures().getKeywords().add(Keywords.LUXURY);};
+		modify(activityRequirements){getFeatures().getKeywords().add(Keywords.ROMANTIC);};
+		modify(activityRequirements){getFeatures().setSpace(Space.StringToEnum("SMALL"));};
+		System.out.println(activityRequirements.toString());	
+end;
+
+rule "Special occasion with colleagues "
+	salience 100
+	agenda-group "recommend"
+	when
+		userRequirements: UserRequirementsDTO( special == true && companion == "COLLEAGUES" );
+		activityRequirements: ActivityRequirements();
+	then
+		modify(activityRequirements){getFeatures().getKeywords().add(Keywords.TEAMBUILDING);};
+		System.out.println(activityRequirements.toString());	
+end;
+
+rule "Teambuildings need option for reservation"
+	salience 80
+	agenda-group "recommend"
+	no-loop  
+	when
+		activityRequirements: ActivityRequirements( features.keywords  contains Keywords.TEAMBUILDING);
+	then
+		modify(activityRequirements){getFeatures().setReservations(true);};
+		System.out.println(activityRequirements.toString());	
+end;
+
+
+rule "Normal occasion with colleagues - business meeting"
+	salience 100
+	agenda-group "recommend"
+	when
+		userRequirements: UserRequirementsDTO( special == false && companion == "COLLEAGUES" );
+		activityRequirements: ActivityRequirements();
+	then
+		modify(activityRequirements){getFeatures().getKeywords().add(Keywords.LUXURY);};
+		System.out.println(activityRequirements.toString());	
+end;
+
+
+rule "Going alone or with friends without a special occasion"
+	salience 100
+	agenda-group "recommend"
+	when
+		userRequirements: UserRequirementsDTO( special == false && (companion == "ALONE" || companion == "FRIENDS" ))
+		activityRequirements: ActivityRequirements()
+	then
+		modify(activityRequirements){getFeatures().getKeywords().add(Keywords.CHILL);};
+		System.out.println(activityRequirements.toString());	
+end;
+
+rule "Chill activities also include access to wifi and tv"
+	salience 80
+	agenda-group "recommend"
+	no-loop  
+	when
+		activityRequirements: ActivityRequirements( features.keywords  contains Keywords.CHILL)
+	then
+		modify(activityRequirements){getFeatures().setWifi(true);};
+		modify(activityRequirements){getFeatures().setTv(true);};
+		System.out.println(activityRequirements.toString());	
+end;
+
+rule "Outdoor activities are preferred when the weather is good"
+	salience 100
+	agenda-group "recommend"
+	when
+		$userRequirements: UserRequirementsDTO($today : date )
+		activityRequirements: ActivityRequirements()
+		eval( ($today.getMonthValue() >= 5) && ($today.getMonthValue() <= 9))	//outdoors from may till september
+	then
+		modify(activityRequirements){getFeatures().setOutdoor(true);};
+		System.out.println("Weather is good");	
+end;
+
+rule "Transportation by foot"
+	salience 100
+	agenda-group "recommend"
+	when
+		$userRequirements: UserRequirementsDTO( transportation == "BY_FOOT" )
+		activityRequirements: ActivityRequirements()
+	then
+		modify(activityRequirements){setLocation(Location.StringToEnum("CITY_CENTER"))};
+		System.out.println("Going by foot");	
+end;
+
+rule "Transportation by bus"
+	salience 100
+	agenda-group "recommend"
+	when
+		$userRequirements: UserRequirementsDTO( transportation == "BUS" )
+		activityRequirements: ActivityRequirements()
+	then
+		modify(activityRequirements){getFeatures().setBusNearby(true);};
+		System.out.println("Going by bus");	
+end;
+
+rule "Transportation by car"
+	salience 100
+	agenda-group "recommend"
+	when
+		$userRequirements: UserRequirementsDTO( transportation == "AUTO" )
+		activityRequirements: ActivityRequirements()
+	then
+		modify(activityRequirements){getFeatures().setParking(true);};
+		System.out.println("Going by car");	
+end;
+
+rule "Activities with bigger space for more than 5 people"
+	salience 100
+	agenda-group "recommend"
+	when
+		$userRequirements: UserRequirementsDTO( numPeople > 5 , numPeople <=10 )
+		activityRequirements: ActivityRequirements()
+	then
+		modify(activityRequirements){getFeatures().setSpace(Space.StringToEnum("MEDIUM"));};
+		System.out.println("Medium sized activity with a few people");	
+end;
+
+rule "Activities with huge space for more than 10 people"
+	salience 100
+	agenda-group "recommend"
+	when
+		$userRequirements: UserRequirementsDTO( numPeople > 10 )
+		activityRequirements: ActivityRequirements()
+	then
+		modify(activityRequirements){getFeatures().setSpace(Space.StringToEnum("LARGE"));};
+		System.out.println("Activity for a bigger group of people");	
+end;
+
+
+rule "Activitys with a basic theme"
+	salience 100
+	agenda-group "recommend"
+	when
+		$userRequirements: UserRequirementsDTO( $t: theme,  theme == "NATURE" || theme == "ADRENALINE" ||
+		 theme == "HISTORY" || theme == "SPORT" )
+		activityRequirements: ActivityRequirements()
+	then
+		modify(activityRequirements){getFeatures().getKeywords().add(Keywords.StringToEnum($t))};
+		System.out.println("Keywords for " + $t);	
+end;
+
+rule "Free activities are preferred"
+	salience 100
+	agenda-group "recommend"
+	when
+		$userRequirements: UserRequirementsDTO( price contains "FREE" )
+		activityRequirements: ActivityRequirements()
+	then
+		modify(activityRequirements){getPrices().add(Price.StringToEnum("FREE"))};
+		System.out.println("Preferring free activities");	
+end;
+
+rule "Cheap activities are preferred"
+	salience 100
+	agenda-group "recommend"
+	when
+		$userRequirements: UserRequirementsDTO( price contains "CHEAP" )
+		activityRequirements: ActivityRequirements()
+	then
+		modify(activityRequirements){getPrices().add(Price.StringToEnum("CHEAP"))};
+		System.out.println("Preferring cheap activities");	
+end;
+
+rule "Moderately priced activities are preferred"
+	salience 100
+	agenda-group "recommend"
+	when
+		$userRequirements: UserRequirementsDTO( price contains "MODERATE" )
+		activityRequirements: ActivityRequirements()
+	then
+		modify(activityRequirements){getPrices().add(Price.StringToEnum("MODERATE"))};
+		System.out.println("Preferring morderately priced activities");	
+end;
+
+rule "EXPENSIVE activities are no problem"
+	salience 100
+	agenda-group "recommend"
+	when
+		$userRequirements: UserRequirementsDTO( price contains "EXPENSIVE" )
+		activityRequirements: ActivityRequirements()
+	then
+		modify(activityRequirements){getPrices().add(Price.StringToEnum("EXPENSIVE"))};
+		System.out.println("Preferring EXPENSIVE activities");	
+end;
+
+rule "End"
+    agenda-group "recommend"
+    salience 79
+    when
+    	UserRequirementsDTO()
+    	$a: ActivityRequirements()
+    	
+    then
+        System.out.println( "Ended reqirements!" );
+        System.out.println($a );
+end

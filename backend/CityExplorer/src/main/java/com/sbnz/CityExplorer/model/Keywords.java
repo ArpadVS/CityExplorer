@@ -1,7 +1,7 @@
 package com.sbnz.CityExplorer.model;
 
 public enum Keywords {
-	ROMANTIC, CHILL, ADVENTURE, TEAMBUILDING, LUXURY, FAMILY_FRIENDLY, EDUCATIONAL, NATURE, SPORT, HISTORY;
+	ROMANTIC, CHILL, ADVENTURE, TEAMBUILDING, LUXURY, FAMILY_FRIENDLY, EDUCATIONAL, NATURE, SPORT, HISTORY, ADRENALINE;
 
 	public static Keywords StringToEnum(String string) {
 		String s = string.toUpperCase();
@@ -25,6 +25,8 @@ public enum Keywords {
 			return Keywords.SPORT;
 		} else if (s.equals("HISTORY")) {
 			return Keywords.HISTORY;
+		} else if (s.equals("ADRENALINE")) {
+			return Keywords.ADRENALINE;
 		} else {
 			return null;
 		}

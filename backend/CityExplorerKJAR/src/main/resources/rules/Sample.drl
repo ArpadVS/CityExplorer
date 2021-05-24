@@ -1,7 +1,0 @@
-package com.sample
-
-rule "GoodBye"
-    when
-    then
-        System.out.println( "Integration works new!" );
-end
