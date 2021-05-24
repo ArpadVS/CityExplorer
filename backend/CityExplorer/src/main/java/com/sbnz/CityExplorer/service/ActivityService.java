@@ -1,9 +1,12 @@
 package com.sbnz.CityExplorer.service;
 
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.drools.template.ObjectDataCompiler;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.QueryResults;
 import org.kie.api.runtime.rule.QueryResultsRow;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import com.sbnz.CityExplorer.converter.ActivityDTOConverter;
 import com.sbnz.CityExplorer.dto.ActivityDTO;
 import com.sbnz.CityExplorer.dto.ReportDTO;
+import com.sbnz.CityExplorer.dto.SearchDTO;
 import com.sbnz.CityExplorer.model.Activity;
 import com.sbnz.CityExplorer.model.Rating;
 import com.sbnz.CityExplorer.model.RegisteredUser;
@@ -34,16 +38,16 @@ public class ActivityService {
 	public List<ActivityDTO> getAll() {
 		List<Activity> activities =  activityRepository.findAll();
 		return (activities.stream().map(activity -> {
-			ActivityDTO dto = ActivityDTOConverter.covertToDTO(activity);
+			ActivityDTO dto = ActivityDTOConverter.convertToDTO(activity);
 			return dto;
 		})).collect(Collectors.toList());
 	}
 
 	public ActivityDTO getActivity(Long id) {
-		Optional<Activity> restaurantOpt = activityRepository.findById(id);
+		Optional<Activity> ActivityOpt = activityRepository.findById(id);
 		KieSession kieSession = droolsService.getRulesSession();
 		kieSession.getAgenda().getAgendaGroup("queries").setFocus();
-		kieSession.insert(restaurantOpt.get());
+		kieSession.insert(ActivityOpt.get());
 
 		ActivityDTO restDTO = null;
 		QueryResults results = kieSession.getQueryResults("User ratings by activity", id);
@@ -88,5 +92,34 @@ public class ActivityService {
 			return (RegisteredUser) userRepository.findOneByUsername(username);
 		}
 		return null;
+	}
+
+	public List<ActivityDTO> search(SearchDTO searchDto) {
+		List<Activity> activities = activityRepository.findAll();
+		System.out.println("Number of activities before search = " + activities.size());
+		List<Activity> result = new ArrayList<Activity>();
+		if (!searchDto.getName().equals("")) {
+			InputStream template = ActivityService.class.getResourceAsStream("/search.drt");
+			if(template == null) {
+				System.out.println("Template is null");
+			}
+			ObjectDataCompiler converter = new ObjectDataCompiler();
+			List<SearchDTO> data = new ArrayList<>();
+			data.add(searchDto);
+			String drl = converter.compile(data, template);
+			System.out.println("\n" + drl + "\n");
+			KieSession kieSession = droolsService.createKieSessionFromDRL(drl);
+			for (Activity activity : activities) {
+				kieSession.insert(activity);
+			}
+			kieSession.setGlobal("result", result);
+			kieSession.fireAllRules();
+		} else {
+			result = activities;
+		}
+		return (result.stream().map(activity -> {
+			ActivityDTO dto = ActivityDTOConverter.convertToDTO(activity);
+			return dto;
+		})).collect(Collectors.toList());
 	}
 }

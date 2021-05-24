@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sbnz.CityExplorer.dto.ActivityDTO;
+import com.sbnz.CityExplorer.dto.SearchDTO;
 import com.sbnz.CityExplorer.service.ActivityService;
 
 @RestController
@@ -36,6 +37,12 @@ public class ActivityController {
 	public ResponseEntity<ActivityDTO> getRestaurant(@PathVariable("id") Long id) {
 		ActivityDTO activity = activityService.getActivity(id);
 		return new ResponseEntity<ActivityDTO>(activity, HttpStatus.OK);
+	}
+
+	@PostMapping(value = "/search")
+	public ResponseEntity<List<ActivityDTO>> search(@RequestBody SearchDTO dto) {
+		List<ActivityDTO> activities = activityService.search(dto);
+		return new ResponseEntity<List<ActivityDTO>>(activities, HttpStatus.OK);
 	}
 
 }

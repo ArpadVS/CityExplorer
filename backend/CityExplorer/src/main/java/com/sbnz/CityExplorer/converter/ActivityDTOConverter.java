@@ -10,7 +10,7 @@ import com.sbnz.CityExplorer.model.Features;
 
 public class ActivityDTOConverter {
 
-	public static ActivityDTO covertToDTO(Activity activity) {
+	public static ActivityDTO convertToDTO(Activity activity) {
 		ActivityDTO dto = new ActivityDTO();
 		dto.setId(activity.getId());
 		dto.setName(activity.getName());
@@ -41,7 +41,7 @@ public class ActivityDTOConverter {
 	}
 
 	public static ActivityDTO convertToDTO(Activity activity, ReportDTO reportDTO) {
-		ActivityDTO dto = ActivityDTOConverter.covertToDTO(activity);
+		ActivityDTO dto = ActivityDTOConverter.convertToDTO(activity);
 		dto.setReportDTO(reportDTO);
 		return dto;
 	}
