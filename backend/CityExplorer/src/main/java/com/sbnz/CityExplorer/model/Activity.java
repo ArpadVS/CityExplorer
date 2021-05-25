@@ -30,6 +30,8 @@ public class Activity {
 	private Features features;
 	@OneToMany
 	private Set<Rating> ratings;
+	@Column
+	private int score = 0;
 
 	public Activity() {
 		super();
@@ -90,6 +92,14 @@ public class Activity {
 
 	public void setRatings(Set<Rating> ratings) {
 		this.ratings = ratings;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
 	}
 
 	@Override

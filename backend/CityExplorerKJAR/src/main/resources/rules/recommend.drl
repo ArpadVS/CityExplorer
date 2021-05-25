@@ -4,9 +4,6 @@ import com.sbnz.CityExplorer.dto.UserRequirementsDTO;
 import com.sbnz.CityExplorer.dto.ActivityDTO;
 import java.util.List;
 
-global List<Activity>previousRecommendations;
-global Activity best;
-
 rule "Start"
     agenda-group "recommend"
     salience 1000
@@ -17,7 +14,7 @@ rule "Start"
     then
         System.out.println( "Started recommendation!" );
         //best.setName("changed");
-end
+end;
 
 rule "Going with family"
 	salience 100
@@ -246,4 +243,4 @@ rule "End"
     then
         System.out.println( "Ended reqirements!" );
         System.out.println($a );
-end
+end;

@@ -128,10 +128,13 @@ public class ActivityService {
 
 	public ActivityDTO getRecommendation(UserRequirementsDTO dto) {
 		dto.setDate(LocalDate.now());
-		
 		ActivityRequirements requirements = new ActivityRequirements();
-		List<Activity> previousForLoggedUser = new ArrayList<Activity>();
+		List<Activity> previousForLoggedUser = getCurrentUser().getRecommendedActivities();
+		if(previousForLoggedUser == null) {
+			previousForLoggedUser = new ArrayList<Activity>();
+		}
 		Activity bestScored = new Activity();
+		List<Activity> activities = activityRepository.findAll();
 		
 		// getting agenda for processing user info
 		KieSession ks = droolsService.getRulesSession();
@@ -140,12 +143,21 @@ public class ActivityService {
 		ks.setGlobal("best", bestScored);
 		ks.insert(dto);
 		ks.insert(requirements);
+		for (Activity a : activities) {
+			ks.insert(a);
+		}
 		ks.fireAllRules();
 		
-		ActivityDTO retVal= ActivityDTOConverter.convertToDTO((Activity)ks.getGlobal("best"));
+		bestScored = (Activity)ks.getGlobal("best");
+		ActivityDTO retVal= ActivityDTOConverter.convertToDTO(bestScored);
+		RegisteredUser u = getCurrentUser();
+		if(!u.getRecommendedActivities().contains(bestScored))
+		{
+			u.getRecommendedActivities().add(bestScored);
+			userRepository.save(u);
+		}
 		
 		droolsService.releaseRulesSession();
-
 		return retVal;
 	}
 }

@@ -8,9 +8,16 @@ import com.sbnz.CityExplorer.model.Features;
 import com.sbnz.CityExplorer.model.Activity;
 import com.sbnz.CityExplorer.dto.UserRequirementsDTO;
 import java.time.LocalDate;
+import java.util.List;
 
-global List<Activity
+global List<Activity>previousRecommendations;
+global Activity best;
 
+
+declare ActivityProcessed
+    activity: Activity
+    ruleName: String
+end
 rule "Start"
     agenda-group "requirements"
     salience 1000
@@ -101,3 +108,16 @@ rule "Transportation by bus"
 		modify(activityRequirements){getFeatures().setBusNearby(true);};
 		System.out.println("Going by bus");	
 end;
+
+
+rule "2 point for activities in the center when BY_FOOT"
+	salience 60
+	agenda-group "recommend"
+	when
+		$a : Activity(location == Lc);
+		ActivityRequirements(location == Location.CITY_CENTER);
+	then
+		modify($a){setScore($a.getScore() + 2);};
+		System.out.println("2 points for " + $a.getName() + " -CENTERBYFOOT");	
+end;
+
