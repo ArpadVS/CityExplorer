@@ -1,1 +1,22 @@
-<p>activity-list works!</p>
+<div>
+  <div class="float-container">
+    <div class="float-child card" *ngFor="let activity of activities" (click)="getDetails(activity.id)">
+      <img class="card-img-top" src={{activity.imageUrl}} width="220" height="220" alt="Card image cap">
+      <div class="card-body">
+
+        <p class="card-text">
+          <strong>{{ activity.name}}</strong>
+        </p>
+        <div class="chipwrapper">
+          <mat-chip-list aria-label="Fish selection" *ngFor="let key of activity.features.keywords">
+              <mat-chip class="chipchip">{{ key }}</mat-chip>
+          </mat-chip-list>
+        </div>
+        <span>{{activity.address}}</span><br><br>
+        <mat-divider></mat-divider>
+        <p class="description">{{activity.description}}</p>
+
+      </div>
+    </div>
+  </div>
+</div>

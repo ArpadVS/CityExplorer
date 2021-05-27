@@ -1,13 +1,13 @@
 <mat-toolbar color="primary" class="navbar">
-    <div>
-            <span style="margin-right: 4px;"><b>WebShop</b></span>
-            <mat-icon>shop</mat-icon>
+    <div  (click)="goHome()" style="cursor: pointer;">
+            <span style="margin-right: 4px;"><b>CityExplorer</b></span>
+            <mat-icon>near_me</mat-icon>
     </div>
 
     <div style="margin-left: 10px;">
         <button id="test" mat-button  [routerLink]="['/test']">
         <mat-icon>supervised_user_circle</mat-icon>
-        <span>LOGGED IN AS MANAGER</span>
+        <span>LOGGED IN AS ADMIN</span>
         </button>
         <button id="myProfileNav" mat-button  [routerLink]="['/profile']">
         <mat-icon>supervised_user_circle</mat-icon>

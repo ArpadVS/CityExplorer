@@ -1,5 +1,5 @@
-<app-navbar-seller *ngIf="role==='ROLE_REGISTERED_USER'"></app-navbar-seller>
-<app-navbar-manager *ngIf="role==='ROLE_ADMIN'"></app-navbar-manager>
+<app-navbar-registered-user *ngIf="role==='ROLE_REGISTERED_USER'"></app-navbar-registered-user>
+<app-navbar-admin *ngIf="role==='ROLE_ADMIN'"></app-navbar-admin>
 <app-navbar-user *ngIf="!role"></app-navbar-user>
 
 

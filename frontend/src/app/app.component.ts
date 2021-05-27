@@ -10,7 +10,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class AppComponent {
 
-  title = 'WebShop';
+  title = 'CityExplorer';
   public role: string;
 
   constructor(

@@ -5,14 +5,13 @@ import { AuthenticationService } from './services/authentication.service';
 import { MaterialModule } from '../material/material.module';
 import { NavbarUserComponent } from './components/navbar-user/navbar-user.component';
 import { ConstantsService } from './services/constants.service';
-import { NavbarSellerComponent } from './components/navbar-seller/navbar-seller.component';
-import { NavbarBuyerComponent } from './components/navbar-buyer/navbar-buyer.component';
-import { NavbarManagerComponent } from './components/navbar-manager/navbar-manager.component';
+import { NavbarRegisteredUserComponent } from './components/navbar-registered-user/navbar-registered-user.component';
+import { NavbarAdminComponent } from './components/navbar-admin/navbar-admin.component';
 
 
 
 @NgModule({
-  declarations: [NavbarUserComponent, NavbarSellerComponent, NavbarBuyerComponent, NavbarManagerComponent],
+  declarations: [NavbarUserComponent, NavbarRegisteredUserComponent, NavbarAdminComponent],
   imports: [
     CommonModule,
     MaterialModule,
@@ -23,7 +22,7 @@ import { NavbarManagerComponent } from './components/navbar-manager/navbar-manag
     ConstantsService
   ],
   exports: [
-     NavbarUserComponent, NavbarSellerComponent, NavbarBuyerComponent, NavbarManagerComponent
+     NavbarUserComponent, NavbarAdminComponent, NavbarRegisteredUserComponent
   ]
 
 })

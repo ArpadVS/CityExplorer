@@ -26,7 +26,8 @@ const routes: Routes = [
     component: ProfileComponent,
     canActivate: [RoleGuard],
     data: {expectedRoles: 'ROLE_REGISTERED_USER|ROLE_ADMIN'}
-  }
+  },
+  { path: '**', component: HomepageComponent }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

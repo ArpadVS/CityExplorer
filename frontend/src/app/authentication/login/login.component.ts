@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     if (this.authenticationService.isLoggedIn()) {
-      this.router.navigate(['test']);
+      this.router.navigate(['home']);
     }
   }
 
@@ -48,8 +48,7 @@ export class LoginComponent implements OnInit {
         token = token.slice(10, token.length - 2 );
         console.log(token);
         localStorage.setItem('user', JSON.stringify(token));
-        localStorage.setItem('cart', JSON.stringify([]));
-        this.router.navigate(['profile']);
+        this.router.navigate(['home']);
       },
       error => {
         this.toastr.error('Incorrect username or password!');

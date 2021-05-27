@@ -19,6 +19,7 @@ public class ActivityDTOConverter {
 			dto.setLocation(activity.getLocation().toString());
 		}
 		dto.setAddress(activity.getAddress());
+		dto.setImageUrl(activity.getImageUrl());
 		if (activity.getFeatures() != null) {
 			dto.setFeatures(ActivityDTOConverter.convertFeaturesToDTO(activity.getFeatures()));
 		}

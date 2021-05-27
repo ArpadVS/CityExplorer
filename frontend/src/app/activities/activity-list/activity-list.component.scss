@@ -1,0 +1,78 @@
+.float-container {
+    padding: 2%;
+    padding-bottom: 0;
+    display: inline-block;
+    width: 100%;
+}
+
+.float-child {
+    width: 20%;
+    float: left;
+    margin: 2%;
+    height: 500px;
+    text-align: justify;
+    opacity: 0.9;
+        border: solid 1.5px gray ;
+          box-shadow:  0 0 10px  rgba(0,0,0,0.6);
+          -moz-box-shadow: 0 0 10px  rgba(0,0,0,0.6);
+          -webkit-box-shadow: 0 0 10px  rgba(0,0,0,0.6);
+          -o-box-shadow: 0 0 10px  rgba(0,0,0,0.6);
+          flex: 0 1 calc(23.3% - 22px);
+    background-color: #d6e8ff;
+    overflow: hidden;
+    cursor: pointer;
+}  
+
+.paginator {
+    margin-left: 15%;
+    margin-bottom: 5%;
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    color: black;
+}
+.description {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+}
+
+.input-group.md-form.form-sm.form-2.pl-0 {
+    margin-top: 5%;
+}
+
+.input-group.md-form.form-sm.form-2{
+    width: 30%;
+    margin: auto;
+}
+
+.input-group.md-form.form-sm.form-2 input {
+    border: 1px solid #bdbdbd;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+  }
+
+  .input-group-text.red.lighten-3 {
+    background-color:  #FF6A5C;
+  }
+  .input-group.md-form.form-sm.form-2 input.red-border {
+    border: 1px solid  #FF6A5C;
+  }
+
+  .card-text {
+      text-align: center;
+      font-size: larger;
+  }
+
+  .chipwrapper {
+    display: flex;   flex-direction: row;   justify-content: space-around;
+  }
+
+  .chipchip {
+      background-color: #3f51b5;
+      color: azure;
+      text-align: center;
+      font-size: small;
+      width: 100%;
+  }
