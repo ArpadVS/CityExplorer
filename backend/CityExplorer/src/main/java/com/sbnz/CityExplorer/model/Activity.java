@@ -32,10 +32,13 @@ public class Activity {
 	private Set<Rating> ratings;
 	@Column
 	private int score = 0;
+	@Column
+	private String imageUrl;
 
 	public Activity() {
 		super();
 		this.ratings = new HashSet<Rating>();
+		this.imageUrl  = "";
 	}
 
 	public Long getId() {
@@ -100,6 +103,14 @@ public class Activity {
 
 	public void setScore(int score) {
 		this.score = score;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	@Override

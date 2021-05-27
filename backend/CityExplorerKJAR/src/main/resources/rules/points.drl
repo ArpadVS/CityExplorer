@@ -3,11 +3,11 @@ import com.sbnz.CityExplorer.model.Activity;
 import com.sbnz.CityExplorer.model.ActivityRequirements;
 import com.sbnz.CityExplorer.model.Location;
 import com.sbnz.CityExplorer.model.Features;
+import com.sbnz.CityExplorer.util.ScoreCalculator;
 import com.sbnz.CityExplorer.dto.UserRequirementsDTO;
 import com.sbnz.CityExplorer.dto.ActivityDTO;
 import java.util.List;
 
-global List<Activity>previousRecommendations;
 global Activity best;
 
 declare FoundBest
@@ -15,18 +15,20 @@ end
 
 rule "The Best Restaurant" 
 	agenda-group "recommend"
-	salience( $activity.getScore() )
+	salience( $calculator.calculateScore($activity, $req ))
     when
-		ActivityRequirements();
+		$req: ActivityRequirements();
 		$activity: Activity($name: name, $score: score);
+		$calculator: ScoreCalculator();
 		not FoundBest()
     then	
     	best = $activity;
     	drools.getKnowledgeRuntime().setGlobal("best", $activity);
-    	System.out.println("Activity " + $name + " has the best score: " + $score );  	
+    	System.out.println("Activity " + $name + " has the best score: " +  $calculator.calculateScore($activity, $req ) );  	
 	    insert( new FoundBest() );
 end;
 
+/*
 rule "Started scoring"
     agenda-group "recommend"
     salience 75
@@ -49,7 +51,6 @@ rule "Reset score for activities to 0"
         best.setName("changed");
 end;
 
-/*
 rule "4 points for matching the price"
     agenda-group "recommend"
     salience 60
@@ -63,7 +64,7 @@ rule "4 points for matching the price"
         System.out.println( "4 points for " + $a.getName() + " - PRICE");
         //System.out.println( $p2.toString());
         System.out.println( $p.toString());
-end;*/
+end;
 
 rule "1 point for parking"
 	salience 60
@@ -198,4 +199,4 @@ rule "-5 points when activity already recommended to user"
 	then
 		modify($a){setScore($a.getScore() - 5);};
 		System.out.println("-5 points for " + $a.getName() + " -ALREADY_RECCOMENDED");	
-end;
+end;*/

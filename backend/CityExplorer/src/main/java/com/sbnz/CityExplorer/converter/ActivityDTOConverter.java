@@ -44,7 +44,7 @@ public class ActivityDTOConverter {
 
 	public static ActivityDTO convertToDTO(Activity activity, ReportDTO reportDTO) {
 		ActivityDTO dto = ActivityDTOConverter.convertToDTO(activity);
-		dto.setReportDTO(reportDTO);
+		dto.setReport(reportDTO);
 		return dto;
 	}
 }

@@ -1,0 +1,22 @@
+<div class="card mb-4 shadow-sm">
+        <span id="category"><b><i>{{ productItem.category }}</i></b></span>
+        <img class="bd-placeholder-img card-img-top p-2" width="100%" [src]="imageUrl" style="align-content: center;"/>
+        <div class="card-body">
+          <p class="card-text">
+            <strong>{{ productItem.price}} RSD</strong>
+          </p>
+          <mat-divider></mat-divider>
+          <p class="card-text">{{ productItem.name }}</p>
+          <p>{{this.value}}</p>
+            <div >
+              <form  [formGroup]="form" (ngSubmit)="submit()" style="display: inline;">
+                <button type="submit" class="btn btn-sm btn-primary product-btn"
+                [disabled]="!form.valid" >Add to Cart</button>
+                  <span style="width: 10%;"></span>
+                <input type="number" class="form-control" id="quantity" name="quantity"  min="1" [max]="this.productItem.quantity" 
+                [formControl]="form.controls.quantity" > 
+            </form>
+            </div>
+          </div>
+      </div>
+      

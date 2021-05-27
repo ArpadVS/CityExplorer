@@ -1,0 +1,22 @@
+<mat-toolbar color="primary" class="navbar">
+
+    <div>
+        <span style="margin-right: 4px;"><b>WebShop</b></span>
+        <mat-icon>shop</mat-icon>
+    </div>
+
+    <span class="spacer"></span>
+
+
+    <div>
+        <button mat-button [routerLink]="['/login']" id="login-btn">
+            <mat-icon>input</mat-icon>
+            <span>Login</span>
+        </button>
+        <button mat-button [routerLink]="['/register']" id="register-btn">
+            <mat-icon>person_add</mat-icon>
+            <span>Register</span>
+        </button>
+    </div>
+
+</mat-toolbar>

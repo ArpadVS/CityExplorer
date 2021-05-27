@@ -7,9 +7,10 @@ public class ActivityDTO {
 	private String description;
 	private String location;
 	private String address;
+	private String imageUrl;
 	private FeaturesDTO features;
 
-	private ReportDTO reportDTO;
+	private ReportDTO report;
 
 	public ActivityDTO() {
 		super();
@@ -63,12 +64,20 @@ public class ActivityDTO {
 		this.features = features;
 	}
 
-	public ReportDTO getReportDTO() {
-		return reportDTO;
+	public ReportDTO getReport() {
+		return report;
 	}
 
-	public void setReportDTO(ReportDTO reportDTO) {
-		this.reportDTO = reportDTO;
+	public void setReport(ReportDTO report) {
+		this.report = report;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	@Override

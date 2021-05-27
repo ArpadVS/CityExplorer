@@ -23,10 +23,10 @@ INSERT INTO features_keywords (features_id, keywords) VALUES
 (102, 'ADRENALINE'),
 (102, 'SPORT');
 
-INSERT INTO activity (id,address,description,location,name,features_id, score) VALUES 
-(100,'Fruskagorska u. 2, Ledinci', 'Something', 'OUTSIDE_THE_CITY', 'Igraonica Fruska', 100, 0),
-(101,'Njegoseva 32', 'Something', 'CITY_CENTER', 'Escape room SAW', 101, 0),
-(102,'Bulevar Evropa 22/a', 'Something', 'SUBURBS', 'Go-karting klub NS', 102, 0);
+INSERT INTO activity (id,address,description,location,name,features_id, score, image_url) VALUES 
+(100,'Fruskagorska u. 2, Ledinci', 'Something', 'OUTSIDE_THE_CITY', 'Igraonica Fruska', 100, 0, 'https://media1.lepojeziveti.com/2017/07/de%C4%8Dje-igrali%C5%A1te-i-pogled.jpg'),
+(101,'Njegoseva 32', 'Something', 'CITY_CENTER', 'Escape room SAW', 101, 0, 'https://miro.medium.com/max/1024/0*zo_1nSzUsWX8flLs.jpg'),
+(102,'Bulevar Evropa 22/a', 'Something', 'SUBURBS', 'Go-karting klub NS', 102, 0, 'https://www.fluxmagazine.com/wp-content/uploads/2017/02/Karting-Web-3.jpg');
 
 
 INSERT INTO rating(id, creation, rating, activity_id, user_id) VALUES

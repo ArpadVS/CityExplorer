@@ -28,11 +28,14 @@ import com.sbnz.CityExplorer.model.Rating;
 import com.sbnz.CityExplorer.model.RegisteredUser;
 import com.sbnz.CityExplorer.repository.ActivityRepository;
 import com.sbnz.CityExplorer.repository.UserRepository;
+import com.sbnz.CityExplorer.util.ScoreCalculator;
 
 @Service
 public class ActivityService {
 	@Autowired
 	ActivityRepository activityRepository;
+	@Autowired
+	ScoreCalculator sc;
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
@@ -129,20 +132,16 @@ public class ActivityService {
 	public ActivityDTO getRecommendation(UserRequirementsDTO dto) {
 		dto.setDate(LocalDate.now());
 		ActivityRequirements requirements = new ActivityRequirements();
-		List<Activity> previousForLoggedUser = getCurrentUser().getRecommendedActivities();
-		if(previousForLoggedUser == null) {
-			previousForLoggedUser = new ArrayList<Activity>();
-		}
 		Activity bestScored = new Activity();
 		List<Activity> activities = activityRepository.findAll();
 		
 		// getting agenda for processing user info
 		KieSession ks = droolsService.getRulesSession();
 		ks.getAgenda().getAgendaGroup("recommend").setFocus();
-		ks.setGlobal("previousRecommendations", previousForLoggedUser);
 		ks.setGlobal("best", bestScored);
 		ks.insert(dto);
 		ks.insert(requirements);
+		ks.insert(sc);
 		for (Activity a : activities) {
 			ks.insert(a);
 		}

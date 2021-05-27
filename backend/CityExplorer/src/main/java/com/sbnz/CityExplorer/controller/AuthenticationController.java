@@ -3,28 +3,31 @@ package com.sbnz.CityExplorer.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sbnz.CityExplorer.dto.LoginDTO;
 import com.sbnz.CityExplorer.dto.RegistrationDTO;
 import com.sbnz.CityExplorer.dto.TokenDTO;
+import com.sbnz.CityExplorer.dto.UserDTO;
 import com.sbnz.CityExplorer.service.AuthenticationService;
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin
 public class AuthenticationController {
-	
+
 	@Autowired
 	private AuthenticationService userService;
 
 	@PostMapping(value = "/login")
-	public  ResponseEntity<TokenDTO> logIn( @RequestBody LoginDTO dto ) {
+	public ResponseEntity<TokenDTO> logIn(@RequestBody LoginDTO dto) {
 		try {
 			String token = userService.login(dto);
 			return new ResponseEntity<TokenDTO>(new TokenDTO(token), HttpStatus.OK);
@@ -33,13 +36,19 @@ public class AuthenticationController {
 			return new ResponseEntity<TokenDTO>(new TokenDTO(), HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@PostMapping(value = "/registration")
-	public ResponseEntity<Boolean> register (@RequestBody RegistrationDTO dto){
+	public ResponseEntity<Boolean> register(@RequestBody RegistrationDTO dto) {
 		if (userService.register(dto) == null) {
 			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
-	
+
+	@RequestMapping("/whoami")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_REGISTERED_USER')")
+	public ResponseEntity<UserDTO> user(@RequestHeader("Authorization") String bearer) {
+		return new ResponseEntity<UserDTO>(this.userService.whoAmI(), HttpStatus.OK);
+	}
+
 }
