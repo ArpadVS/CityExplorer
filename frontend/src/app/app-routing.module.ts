@@ -8,6 +8,7 @@ import { CartComponent } from './products/cart/cart.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { RoleGuard } from './core/guards/role.guard';
 import { ProductPageComponent } from './products/product-page/product-page.component';
+import { ActivityDetailedComponent } from './activities/activity-detailed/activity-detailed.component'
 
 
 const routes: Routes = [
@@ -27,6 +28,7 @@ const routes: Routes = [
     canActivate: [RoleGuard],
     data: {expectedRoles: 'ROLE_REGISTERED_USER|ROLE_ADMIN'}
   },
+  {path: 'activity/:id', component: ActivityDetailedComponent},
   { path: '**', component: HomepageComponent }
 ];
 @NgModule({

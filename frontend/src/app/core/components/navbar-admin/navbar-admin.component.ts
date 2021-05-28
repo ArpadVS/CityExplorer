@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppComponent } from 'src/app/app.component'
 
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -10,7 +11,10 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class NavbarAdminComponent implements OnInit {
 
-  constructor(private router: Router, private toastr: ToastrService) { }
+  constructor(
+    private router: Router, 
+    private toastr: ToastrService,
+    private mainPage : AppComponent) { }
 
   ngOnInit() {
   }
@@ -19,7 +23,8 @@ export class NavbarAdminComponent implements OnInit {
     localStorage.removeItem('user');
     localStorage.removeItem('cart');
     this.toastr.success('Succesful logout!');
-    this.router.navigate(['/home']);
+    this.mainPage.checkRole();
+    this.goHome();
   }
 
   

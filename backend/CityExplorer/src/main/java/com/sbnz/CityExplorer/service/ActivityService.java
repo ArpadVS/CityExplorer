@@ -84,7 +84,11 @@ public class ActivityService {
 					}
 				}
 			}
-			ReportDTO reportDTO = new ReportDTO(ratingSum / ratingNum, ratingNum, ones, twos, threes, fours, fives,
+			double average = 0;
+			if(ratingNum!= 0) {
+				average = ratingSum / ratingNum;
+			}
+			ReportDTO reportDTO = new ReportDTO(average, ratingNum, ones, twos, threes, fours, fives,
 					userReview);
 			restDTO = ActivityDTOConverter.convertToDTO(activity, reportDTO);
 		}

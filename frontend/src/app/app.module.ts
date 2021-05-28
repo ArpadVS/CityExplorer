@@ -17,12 +17,15 @@ import { BootstrapModule } from './material/bootstrap/bootstrap.module';
 import { TooltipModule } from 'ngx-bootstrap';
 import { HomepageComponent } from './homepage/homepage.component';
 import { ActivityListComponent } from './activities/activity-list/activity-list.component';
+import { ActivityDetailedComponent } from './activities/activity-detailed/activity-detailed.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     HomepageComponent,
-    ActivityListComponent
+    ActivityListComponent,
+    ActivityDetailedComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +38,7 @@ import { ActivityListComponent } from './activities/activity-list/activity-list.
     HttpClientModule,
     ToastrModule.forRoot({
       progressBar: true,
-      timeOut: 4000,
+      timeOut: 3500,
       closeButton: true,
       positionClass: 'toast-bottom-right',
       preventDuplicates: true

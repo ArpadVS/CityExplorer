@@ -18,5 +18,9 @@ export class ActivityService {
   getAll(): Observable<Activity[]> {
     return this.http.get<Activity[]>(this.activityPath, {headers: this.headers, responseType: 'json'});
   }
+
+  getOne(id :number ): Observable<Activity> {
+    return this.http.get<Activity>(this.activityPath + '/details/' + id, {headers: this.headers, responseType: 'json'});
+  }
   
 }

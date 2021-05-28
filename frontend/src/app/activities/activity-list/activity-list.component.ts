@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Activity } from 'src/app/models/activity.model';
 import { ActivityService } from 'src/app/core/services/activity.service'
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-activity-list',
@@ -13,7 +14,8 @@ export class ActivityListComponent implements OnInit {
 
   constructor(
     private activityService: ActivityService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router : Router
   ) { }
 
   ngOnInit() {
@@ -36,7 +38,8 @@ export class ActivityListComponent implements OnInit {
   }
 
   getDetails(id: number){
-    this.toastr.info('Clicked on id ' + id);
+    let link: String = 'activity/' + id;
+    this.router.navigate([link]);
   }
 
 }
