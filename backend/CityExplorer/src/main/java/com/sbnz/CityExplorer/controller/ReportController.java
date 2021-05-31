@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sbnz.CityExplorer.dto.ActivityDTO;
 import com.sbnz.CityExplorer.dto.DissatisfiedUsersDTO;
 import com.sbnz.CityExplorer.dto.PopularityDTO;
-import com.sbnz.CityExplorer.dto.RatingRange;
+import com.sbnz.CityExplorer.dto.RatingRangeDTO;
 import com.sbnz.CityExplorer.service.ReportService;
 
 @RestController
@@ -54,7 +54,7 @@ public class ReportController {
 	}
 
 	@PostMapping(value = "/getByRatingRange")
-	public ResponseEntity<List<ActivityDTO>> getactivitiesByRatingRange(@RequestBody RatingRange dto) {
+	public ResponseEntity<List<ActivityDTO>> getactivitiesByRatingRange(@RequestBody RatingRangeDTO dto) {
 		List<ActivityDTO> activities = reportService.getActivitiesByRatingRange(dto);
 		return new ResponseEntity<List<ActivityDTO>>(activities, HttpStatus.OK);
 	}

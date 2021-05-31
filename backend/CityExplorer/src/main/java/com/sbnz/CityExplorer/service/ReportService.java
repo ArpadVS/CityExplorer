@@ -1,10 +1,13 @@
 package com.sbnz.CityExplorer.service;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.drools.template.ObjectDataCompiler;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +17,7 @@ import com.sbnz.CityExplorer.converter.RegistrationDTOConverter;
 import com.sbnz.CityExplorer.dto.ActivityDTO;
 import com.sbnz.CityExplorer.dto.DissatisfiedUsersDTO;
 import com.sbnz.CityExplorer.dto.PopularityDTO;
-import com.sbnz.CityExplorer.dto.RatingRange;
+import com.sbnz.CityExplorer.dto.RatingRangeDTO;
 import com.sbnz.CityExplorer.dto.UserActivitiesDTO;
 import com.sbnz.CityExplorer.model.Activity;
 import com.sbnz.CityExplorer.model.RegisteredUser;
@@ -133,9 +136,28 @@ public class ReportService {
 		return satisfiedUsersList;
 	}
 
-	public List<ActivityDTO> getActivitiesByRatingRange(RatingRange dto) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ActivityDTO> getActivitiesByRatingRange(RatingRangeDTO dto) {
+		// Creating KieSession and inserting rule from template
+		InputStream template = ReportService.class
+				.getResourceAsStream("/templates/getActivitiesByRatingRange.drt");
+		ObjectDataCompiler converter = new ObjectDataCompiler();
+		List<RatingRangeDTO> data = new ArrayList<RatingRangeDTO>();
+		data.add(dto);
+		String drl = converter.compile(data, template);
+		System.out.println("\n\n" + drl + "\n\n");
+		KieSession kieSession = droolsService.createKieSessionFromDRL(drl);
+
+		// Application of rules and collecting result
+		List<Activity> result = new ArrayList<>();
+		for (Activity activity : activityRepository.findAll()) {
+			kieSession.insert(activity);
+		}
+		kieSession.setGlobal("result", result);
+		kieSession.fireAllRules();
+		return (result.stream().map(acti -> {
+			ActivityDTO activityDTO = ActivityDTOConverter.convertToDTO(acti);
+			return activityDTO;
+		})).collect(Collectors.toList());
 	}
 
 }

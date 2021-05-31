@@ -1,14 +1,14 @@
 package com.sbnz.CityExplorer.dto;
 
-public class RatingRange {
+public class RatingRangeDTO {
 
 	private double minRating;
 	private double maxRating;
 
-	public RatingRange() {
+	public RatingRangeDTO() {
 	}
 
-	public RatingRange(double minRating, double maxRating) {
+	public RatingRangeDTO(double minRating, double maxRating) {
 		super();
 		this.minRating = minRating;
 		this.maxRating = maxRating;

@@ -1,0 +1,28 @@
+template header
+
+minRating
+maxRating
+
+package rules;
+
+import com.sbnz.CityExplorer.model.*;
+import java.util.List;
+import java.util.ArrayList;
+global ArrayList<Activity> result;
+
+template "rating-rules"
+
+rule "Get activities with rating in the given range_@{row.rowNumber}"
+no-loop true
+when
+	$activity: Activity();
+	$mark: Number( doubleValue >= @{minRating} &&  doubleValue <= @{maxRating}) from accumulate(
+            Rating($r: rating) from $activity.getRatings(),
+            average($r)
+        );
+then
+	$activity.setAverage(Double.valueOf($mark.toString()));
+    result.add($activity);
+end
+
+end template
