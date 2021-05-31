@@ -8,6 +8,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,7 +38,7 @@ public class Features {
 	private Price price;
 	@Column
 	@Enumerated(EnumType.STRING)
-	@ElementCollection(targetClass = Keywords.class)
+	@ElementCollection(targetClass = Keywords.class,fetch = FetchType.EAGER)
 	private Set<Keywords> keywords;
 
 	public Features() {

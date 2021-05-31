@@ -1,0 +1,49 @@
+package com.rules;
+import com.sbnz.CityExplorer.model.*;
+import java.util.List;
+
+global Activity mostRecommendedActivity;
+global Activity leastRecommendedActivity;
+
+declare AlreadyProcessed
+	ruleName: String
+end
+
+// getting how many times was an activity recommended to every user
+query getNumOfRecommendations(Long activityId, Long $NumOfRecommendations)
+	$users:  List() from collect(RegisteredUser());
+	$NumOfRecommendations:= Number() from accumulate (
+		RegisteredUser($user: this, $recommendedActivities: recommendedActivities ) from $users
+		and
+		List(size == 1) from collect(Activity( id == activityId ) from $recommendedActivities),
+		count($user)
+	);		
+end;
+
+rule "Most times recommended activity"
+	agenda-group "popularity"
+	salience ($NumOfRecommendations*10)
+	when
+		not AlreadyProcessed(ruleName == "Most recommended");
+		$activity:  Activity( $id: id, $name: name );
+		?getNumOfRecommendations($id, $NumOfRecommendations;)
+	then 
+		System.out.println("\tMost recommended is " + $name + " => " + $NumOfRecommendations);
+		mostRecommendedActivity = $activity;
+		drools.getKnowledgeRuntime().setGlobal("mostRecommendedActivity", $activity);
+		insert( new AlreadyProcessed("Most recommended") );
+end;
+
+rule "The least times recommended activity"
+	agenda-group "popularity"
+	salience (100/($NumOfRecommendations+1))
+	when
+		not AlreadyProcessed(ruleName == "Least recommended");
+		$activity:  Activity( $id: id, $name: name );
+		?getNumOfRecommendations($id, $NumOfRecommendations;)
+	then 
+		System.out.println("\tLeast recommended is " + $name + " => " + $NumOfRecommendations);
+		leastRecommendedActivity = $activity;
+		drools.getKnowledgeRuntime().setGlobal("leastRecommendedActivity", $activity);
+		insert( new AlreadyProcessed("Least recommended") );
+end;

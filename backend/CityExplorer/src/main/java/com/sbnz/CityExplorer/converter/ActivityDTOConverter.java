@@ -20,7 +20,9 @@ public class ActivityDTOConverter {
 		}
 		dto.setAddress(activity.getAddress());
 		dto.setImageUrl(activity.getImageUrl());
-		dto.setAverageRating(activity.getAverage());
+		if(activity.getAverage() != null) {
+			dto.setAverageRating(activity.getAverage());
+		}
 		if (activity.getFeatures() != null) {
 			dto.setFeatures(ActivityDTOConverter.convertFeaturesToDTO(activity.getFeatures()));
 		}

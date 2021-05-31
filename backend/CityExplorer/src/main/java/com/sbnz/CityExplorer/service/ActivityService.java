@@ -114,7 +114,7 @@ public class ActivityService {
 		System.out.println("Number of activities before search = " + activities.size());
 		List<Activity> result = new ArrayList<Activity>();
 		if (!searchDto.getName().equals("")) {
-			InputStream template = ActivityService.class.getResourceAsStream("/search.drt");
+			InputStream template = ActivityService.class.getResourceAsStream("/templates/search.drt");
 			if (template == null) {
 				System.out.println("Template is null");
 			}
@@ -152,7 +152,7 @@ public class ActivityService {
 		ks.setGlobal("calc", sc);
 		ks.insert(dto);
 		ks.insert(requirements);
-		ks.insert(sc);
+		//ks.insert(sc);
 		for (Activity a : activities) {
 			ks.insert(a);
 		}

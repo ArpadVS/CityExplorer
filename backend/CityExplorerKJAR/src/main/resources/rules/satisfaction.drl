@@ -1,0 +1,54 @@
+package rules;
+import com.sbnz.CityExplorer.model.*;
+import com.sbnz.CityExplorer.dto.UserActivitiesDTO;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
+import java.time.LocalDate;
+
+global List<UserActivitiesDTO> satisfiedUsers;
+global List<UserActivitiesDTO> dissatisfiedUsers;
+
+
+rule "In the last three months for at least 6 recommended activities user gave 1 or 2 star ratings in at least 3 cases"
+	agenda-group "dissatisfied"
+	lock-on-active 
+	when
+		$user: RegisteredUser($recommendedActivities: recommendedActivities, recommendedActivities.size() >= 6);
+		accumulate (
+			Activity( $activity: this, $ratings: ratings) from $recommendedActivities
+			and 
+			List(size == 1) from collect(
+         		Rating( registeredUser == $user &&  rating < 2.5 && creation.isAfter(LocalDate.now().minusMonths(3)) )
+         		from $ratings
+         	),
+			$activities: collectList($activity)
+		);
+		eval($activities.size() >= 3);
+	then
+		System.out.println("Dissatisfied user with username " + $user.getUsername() + ", number of bad ratings given: " + $activities.size());			
+		dissatisfiedUsers.add(new UserActivitiesDTO($user, $activities ));
+end;
+
+
+rule "In the last three months for 6 recommended activities user gave 4 or 5 star rating in at least 3 cases"
+	agenda-group "satisfied"
+	lock-on-active  
+	when
+		$user: RegisteredUser($recommendedActivities: recommendedActivities, recommendedActivities.size() >= 6);
+		accumulate (
+			Activity( $activity: this, $ratings: ratings) from $recommendedActivities
+			and 
+			List(size == 1) from collect(
+         		Rating( registeredUser == $user &&  rating > 3.5 && creation.isAfter(LocalDate.now().minusMonths(3)) )
+         		from $ratings
+         	),
+			$activities: collectList($activity)
+		);
+		eval($activities.size() >= 3);
+	then
+		System.out.println("Satisfied user with username " + $user.getUsername() + ", number of good ratings given: " + $activities.size());
+		satisfiedUsers.add(new UserActivitiesDTO($user, $activities ));
+end;

@@ -14,7 +14,7 @@ global Integer bestScore;
 global ScoreCalculator calc;
 
 declare BestScore
-	value : String
+	value : Integer
 end;
 
 declare FoundBest
@@ -50,33 +50,37 @@ rule "The Best Activity score"
 	salience 55
 	lock-on-active 
     when
-		Activity($maxScore : score, $id : id)
+		$a : Activity($maxScore : score, $id : id)
 		not Activity(score > $maxScore, id != $id)
     then	
-		insert (new BestScore($maxScore + ""));
+    	drools.getKnowledgeRuntime().setGlobal("b", $maxScore);
+		//insert (new BestScore($maxScore));
     	System.out.println("=========================" );  	
     	System.out.println("Biggest score is " + $maxScore + "for" + $id);  
 end;
 
-
+/*
 rule "Find one with best score (if more with same score)"
 	agenda-group "recommend"
 	salience 50
 	lock-on-active 
     when
-		$a: Activity(score.toString().equals("10"))
+    	BestScore($sc : value)
+//		$a: Activity(score == $sc)
+	//	not FoundBest()
     then	
     	//drools.getKnowledgeRuntime().setGlobal("bestScore", $maxValue);
     	System.out.println("Found one best" );  	
-    	System.out.println( $a.toString() );
+    	//System.out.println( $a.toString() );
     	insert(new FoundBest());
-end;
+end;*/
 
 
 rule "Reset score for activities to 0"
     agenda-group "recommend"
     salience -50
     lock-on-active 
+    enabled false
     when
 		$a : Activity()
     then

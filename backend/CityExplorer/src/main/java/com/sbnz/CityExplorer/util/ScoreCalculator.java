@@ -111,6 +111,7 @@ public class ScoreCalculator {
 		RegisteredUser u = getCurrentUser();
 		List<Activity> previous = u.getRecommendedActivities();
 		if((previous!= null) && previous.contains(activity)) {
+			System.out.println("Already recommended");
 			score -= 10;
 		}
 
