@@ -8,6 +8,7 @@ public class ActivityDTO {
 	private String location;
 	private String address;
 	private String imageUrl;
+	private double averageRating;
 	private FeaturesDTO features;
 
 	private ReportDTO report;
@@ -78,6 +79,14 @@ public class ActivityDTO {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public double getAverageRating() {
+		return averageRating;
+	}
+
+	public void setAverageRating(double averageRating) {
+		this.averageRating = averageRating;
 	}
 
 	@Override

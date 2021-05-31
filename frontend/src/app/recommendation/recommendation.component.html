@@ -1,0 +1,111 @@
+<div class="container"  *ngIf="showForm">
+    <mat-card class="box-card">
+    <form [formGroup]="requirementsForm" (ngSubmit)="requirementsForm.valid && submit()" noval id="reqForm">
+        <div class="text">
+            What kind of transportation will you take?
+        </div><br>
+        
+        <mat-radio-group aria-label="Select an option" formControlName='transportation'>
+            <div class="row" style="width: 90%;">
+                <mat-radio-button value=BY_FOOT>By foot
+                </mat-radio-button>
+                <mat-radio-button value=AUTO>By car
+                </mat-radio-button>
+                <mat-radio-button value=BUS>By bus
+                </mat-radio-button>
+            </div><br>
+        </mat-radio-group>
+        <mat-divider></mat-divider><br>
+        
+        <div class="text">
+            Whom will you go with?
+        </div><br>
+
+        <mat-radio-group aria-label="Select an option" formControlName="companion" (change) = "checkAlone()">
+            <div class="row" style="width: 90%;"> 
+                <mat-radio-button value=ALONE>Alone
+                </mat-radio-button>
+                <mat-radio-button value=PARTNER>Partner
+                </mat-radio-button>
+                <mat-radio-button value=FAMILY>Family
+                </mat-radio-button>
+                <mat-radio-button value=COLLEAGUES>Colleagues
+                </mat-radio-button>
+                <mat-radio-button value=FRIENDS>Friends
+                </mat-radio-button>
+            </div><br>
+        </mat-radio-group>
+        <mat-divider></mat-divider><br>
+
+        <span *ngIf="showNumber">
+        <div class="text">
+            How many people will go (including yourself) ?
+        </div><br>
+        
+        <div class="row" style="width: 90%;"> 
+            
+            <mat-form-field appearance="fill">
+            <mat-label>Select a number</mat-label>
+            <input matInput type="number" value="1" min="1" max="50" formControlName="numPeople">
+            
+            </mat-form-field>
+        </div><br>
+        <mat-divider></mat-divider><br>
+        </span>
+
+        
+        <div class="text">
+            Are you searching for a special occasion(birthday, anniversary) ?
+        </div><br>
+        <mat-radio-group aria-label="Select an option" formControlName="special">
+            <div class="row" style="width: 90%;"> 
+                <mat-radio-button value=true>Yes
+                </mat-radio-button>
+                <mat-radio-button value=false>No
+                </mat-radio-button>
+            </div><br>
+        </mat-radio-group>
+        <mat-divider></mat-divider><br>
+
+        <div class="text">
+            Which price range is acceptable to you?
+        </div><br>
+        <div class="row" style="width: 90%;">
+            <mat-checkbox formControlName="free">Free </mat-checkbox> &nbsp;&nbsp;|&nbsp;&nbsp;
+            <mat-checkbox formControlName="cheap">Cheap</mat-checkbox> &nbsp;&nbsp;|&nbsp;&nbsp;
+            <mat-checkbox formControlName="moderate">Moderate</mat-checkbox> &nbsp;&nbsp;|&nbsp;&nbsp;
+            <mat-checkbox formControlName="expensive">Expensive</mat-checkbox>
+        </div>
+        <mat-divider></mat-divider><br>
+
+        <div class="text">
+            In what theme are you interested in?
+        </div><br>
+        <div class="row" style="width: 90%;">
+            <mat-form-field appearance="fill">
+                <mat-label>Select an option</mat-label>
+                <mat-select formControlName = "theme">
+                  <mat-option value="NATURE">Nature</mat-option>
+                  <mat-option value="ADRENALINE">Adrenaline</mat-option>
+                  <mat-option value="HISTORY">History</mat-option>
+                  <mat-option value="SPORT">Sport</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <mat-divider></mat-divider><br>
+
+        <div class="row" style="width: 90%;"> 
+            <button mat-raised-button color="primary" type="submit" (click)='submit()'  [disabled]="!requirementsForm.valid">Recommend</button>
+        </div><br>
+    </form>
+    </mat-card>
+</div>
+<br><br>
+
+<!--Result-->
+<div *ngIf="showResult" style="margin: auto; width: 70%;">
+    <h2 style="text-align:center;">Result:</h2><br>
+    <app-activity-simple [activity]="recommendedActivity"></app-activity-simple>
+    <br>
+    <button type="submit" (click) = "goBack()"  class="btn btn-success">Back</button>
+</div>

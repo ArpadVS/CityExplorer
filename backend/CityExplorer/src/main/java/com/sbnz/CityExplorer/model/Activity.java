@@ -1,12 +1,15 @@
 package com.sbnz.CityExplorer.model;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,19 +29,23 @@ public class Activity {
 	private Location location;
 	@Column
 	private String address;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Features features;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Rating> ratings;
 	@Column
-	private int score = 0;
+	private Integer score;
+	@Column
+	private Double average;
 	@Column
 	private String imageUrl;
+	@Column
+	private LocalDate alarm;
 
 	public Activity() {
 		super();
 		this.ratings = new HashSet<Rating>();
-		this.imageUrl  = "";
+		this.imageUrl = "";
 	}
 
 	public Long getId() {
@@ -97,12 +104,28 @@ public class Activity {
 		this.ratings = ratings;
 	}
 
-	public int getScore() {
+	public Integer getScore() {
 		return score;
 	}
 
-	public void setScore(int score) {
+	public void setScore(Integer score) {
 		this.score = score;
+	}
+
+	public Double getAverage() {
+		return average;
+	}
+
+	public void setAverage(Double average) {
+		this.average = average;
+	}
+
+	public LocalDate getAlarm() {
+		return alarm;
+	}
+
+	public void setAlarm(LocalDate alarm) {
+		this.alarm = alarm;
 	}
 
 	public String getImageUrl() {
@@ -115,8 +138,8 @@ public class Activity {
 
 	@Override
 	public String toString() {
-		return "Activity [id=" + id + ", name=" + name + ", description=" + description + ", location=" + location
-				+ ", address=" + address + ", features=" + features + "]";
+		return "Activity [id=" + id + ", name=" + name + ", location=" + location + ", address=" + address
+				+ ", features=" + features + ", score=" + score + "]";
 	}
 
 	@Override

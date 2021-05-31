@@ -10,4 +10,5 @@ export class Activity{
     imageUrl: String;
     features: Features;
     report: Report;
+    averageRating: number;
 }

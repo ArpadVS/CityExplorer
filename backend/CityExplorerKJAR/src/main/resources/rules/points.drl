@@ -6,26 +6,83 @@ import com.sbnz.CityExplorer.model.Features;
 import com.sbnz.CityExplorer.util.ScoreCalculator;
 import com.sbnz.CityExplorer.dto.UserRequirementsDTO;
 import com.sbnz.CityExplorer.dto.ActivityDTO;
+import java.lang.Integer;
 import java.util.List;
 
 global Activity best;
+global Integer bestScore;
+global ScoreCalculator calc;
+
+declare BestScore
+	value : String
+end;
 
 declare FoundBest
-end
+end;
 
-rule "The Best Restaurant" 
+rule "Calculate score for each activity based on requirements"
 	agenda-group "recommend"
-	salience( $calculator.calculateScore($activity, $req ))
+	salience 60
+	lock-on-active 
     when
 		$req: ActivityRequirements();
 		$activity: Activity($name: name, $score: score);
-		$calculator: ScoreCalculator();
-		not FoundBest()
     then	
-    	best = $activity;
-    	drools.getKnowledgeRuntime().setGlobal("best", $activity);
-    	System.out.println("Activity " + $name + " has the best score: " +  $calculator.calculateScore($activity, $req ) );  	
-	    insert( new FoundBest() );
+		int score = calc.calculateScore($activity,$req);
+		modify($activity){setScore(score)};
+    	System.out.println("Activity " + $name + ", Score: " + score );  	
+end;
+
+
+rule "IPrint activities"
+	agenda-group "recommend"
+	salience 58
+	lock-on-active 
+	when
+		$a : Activity()
+	then
+    	System.out.println($a.toString());
+	
+end
+
+rule "The Best Activity score"
+	agenda-group "recommend"
+	salience 55
+	lock-on-active 
+    when
+		Activity($maxScore : score, $id : id)
+		not Activity(score > $maxScore, id != $id)
+    then	
+		insert (new BestScore($maxScore + ""));
+    	System.out.println("=========================" );  	
+    	System.out.println("Biggest score is " + $maxScore + "for" + $id);  
+end;
+
+
+rule "Find one with best score (if more with same score)"
+	agenda-group "recommend"
+	salience 50
+	lock-on-active 
+    when
+		$a: Activity(score.toString().equals("10"))
+    then	
+    	//drools.getKnowledgeRuntime().setGlobal("bestScore", $maxValue);
+    	System.out.println("Found one best" );  	
+    	System.out.println( $a.toString() );
+    	insert(new FoundBest());
+end;
+
+
+rule "Reset score for activities to 0"
+    agenda-group "recommend"
+    salience -50
+    lock-on-active 
+    when
+		$a : Activity()
+    then
+    	modify($a){setScore(0)};
+        System.out.println( "Score reset to " + $a.getScore() + " for " + $a.getName());
+        System.out.println( bestScore );
 end;
 
 /*

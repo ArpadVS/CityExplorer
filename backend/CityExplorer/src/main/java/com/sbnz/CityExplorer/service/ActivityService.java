@@ -3,6 +3,7 @@ package com.sbnz.CityExplorer.service;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,14 +20,17 @@ import org.springframework.stereotype.Service;
 
 import com.sbnz.CityExplorer.converter.ActivityDTOConverter;
 import com.sbnz.CityExplorer.dto.ActivityDTO;
+import com.sbnz.CityExplorer.dto.RatingDTO;
 import com.sbnz.CityExplorer.dto.ReportDTO;
 import com.sbnz.CityExplorer.dto.SearchDTO;
 import com.sbnz.CityExplorer.dto.UserRequirementsDTO;
+import com.sbnz.CityExplorer.events.RatingEvent;
 import com.sbnz.CityExplorer.model.Activity;
 import com.sbnz.CityExplorer.model.ActivityRequirements;
 import com.sbnz.CityExplorer.model.Rating;
 import com.sbnz.CityExplorer.model.RegisteredUser;
 import com.sbnz.CityExplorer.repository.ActivityRepository;
+import com.sbnz.CityExplorer.repository.RatingRepository;
 import com.sbnz.CityExplorer.repository.UserRepository;
 import com.sbnz.CityExplorer.util.ScoreCalculator;
 
@@ -38,6 +42,8 @@ public class ActivityService {
 	ScoreCalculator sc;
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	RatingRepository ratingRepository;
 	@Autowired
 	DroolsService droolsService;
 
@@ -85,11 +91,10 @@ public class ActivityService {
 				}
 			}
 			double average = 0;
-			if(ratingNum!= 0) {
+			if (ratingNum != 0) {
 				average = ratingSum / ratingNum;
 			}
-			ReportDTO reportDTO = new ReportDTO(average, ratingNum, ones, twos, threes, fours, fives,
-					userReview);
+			ReportDTO reportDTO = new ReportDTO(average, ratingNum, ones, twos, threes, fours, fives, userReview);
 			restDTO = ActivityDTOConverter.convertToDTO(activity, reportDTO);
 		}
 		return restDTO;
@@ -138,11 +143,13 @@ public class ActivityService {
 		ActivityRequirements requirements = new ActivityRequirements();
 		Activity bestScored = new Activity();
 		List<Activity> activities = activityRepository.findAll();
-		
+
 		// getting agenda for processing user info
-		KieSession ks = droolsService.getRulesSession();
+		KieSession ks = droolsService.getKieContainer().newKieSession("rulesSession");
 		ks.getAgenda().getAgendaGroup("recommend").setFocus();
 		ks.setGlobal("best", bestScored);
+		ks.setGlobal("bestScore", Integer.valueOf(0));
+		ks.setGlobal("calc", sc);
 		ks.insert(dto);
 		ks.insert(requirements);
 		ks.insert(sc);
@@ -150,17 +157,65 @@ public class ActivityService {
 			ks.insert(a);
 		}
 		ks.fireAllRules();
-		
-		bestScored = (Activity)ks.getGlobal("best");
-		ActivityDTO retVal= ActivityDTOConverter.convertToDTO(bestScored);
+
+		bestScored = (Activity) ks.getGlobal("best");
+		ActivityDTO retVal = ActivityDTOConverter.convertToDTO(bestScored);
 		RegisteredUser u = getCurrentUser();
-		if(!u.getRecommendedActivities().contains(bestScored))
-		{
+		if (!u.getRecommendedActivities().contains(bestScored)) {
 			u.getRecommendedActivities().add(bestScored);
-			userRepository.save(u);
+			// userRepository.save(u);
 		}
-		
-		droolsService.releaseRulesSession();
+
+		ks.dispose();
 		return retVal;
+	}
+
+	public boolean rateActivity(RatingDTO dto) {
+		Activity activity = activityRepository.findById(dto.getActivityId()).get();
+		RegisteredUser logged = getCurrentUser();
+
+		// User can rate only when something already recommended-checking that
+		boolean alreadyRecommended = false;
+		Rating newRating = null;
+
+		// check if already recommended
+		for (Activity a : logged.getRecommendedActivities()) {
+			if (a.getId() == dto.getActivityId()) {
+				alreadyRecommended = true;
+
+				// checking if user already rated activity
+				for (Rating oldRating : activity.getRatings()) {
+					if (oldRating.getRegisteredUser().getId() == logged.getId()) {
+						newRating = oldRating;
+						break;
+					}
+				}
+				break;
+			}
+		}
+
+		if (alreadyRecommended) {
+			// if no rating from before
+			if (newRating == null) {
+				newRating = new Rating(dto.getRating(), activity, logged);
+			} else {
+				newRating.setRating(dto.getRating());
+				System.out.println("changedmyrating");
+			}
+			ratingRepository.save(newRating);
+			activity.getRatings().add(newRating);
+			RatingEvent ratingEvent = new RatingEvent(new Date(), newRating);
+
+			KieSession ks = droolsService.getEventsSession();
+			ks.insert(ratingEvent);
+
+			ks.getAgenda().getAgendaGroup("rating").setFocus();
+			ks.fireAllRules();
+			activityRepository.save(activity);
+
+		} else {
+			System.out.println("Cant rate activity which was not recommended before");
+		}
+		return alreadyRecommended;
 	}
 }

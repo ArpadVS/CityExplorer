@@ -18,6 +18,8 @@ import { TooltipModule } from 'ngx-bootstrap';
 import { HomepageComponent } from './homepage/homepage.component';
 import { ActivityListComponent } from './activities/activity-list/activity-list.component';
 import { ActivityDetailedComponent } from './activities/activity-detailed/activity-detailed.component';
+import { RecommendationComponent } from './recommendation/recommendation.component';
+import { ActivitySimpleComponent } from './activities/activity-simple/activity-simple.component';
 
 
 @NgModule({
@@ -25,7 +27,9 @@ import { ActivityDetailedComponent } from './activities/activity-detailed/activi
     AppComponent,
     HomepageComponent,
     ActivityListComponent,
-    ActivityDetailedComponent
+    ActivityDetailedComponent,
+    RecommendationComponent,
+    ActivitySimpleComponent
   ],
   imports: [
     BrowserModule,

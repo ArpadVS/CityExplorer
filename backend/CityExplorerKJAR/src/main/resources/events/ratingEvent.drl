@@ -1,0 +1,50 @@
+package events;
+import com.sbnz.CityExplorer.model.*;
+import com.sbnz.CityExplorer.events.*;
+import java.time.LocalDate;
+
+declare ProcessedEvent
+	eventDate: String
+end
+
+rule "Rating event"
+	agenda-group "rating"
+	salience 100
+    when
+        $ratingEvent: RatingEvent($rating: rating );
+        $average: Number() from accumulate(
+            Rating($r: rating) from $rating.getActivity().getRatings(),
+            average($r)
+        );
+        not ProcessedEvent(eventDate == $ratingEvent.getExecutionTime().toString());
+    then
+    	modify($ratingEvent) { getRating().getActivity().setAverage(Double.parseDouble($average.toString())) }
+		insert( new ProcessedEvent($ratingEvent.getExecutionTime().toString()) );	
+		System.out.println("RULE: New average is : " + $average);	
+end;
+
+rule "The activity rating is below 3 a minimum of 4 users rated it"
+	agenda-group "rating"
+	salience 90
+    when
+        $ratingEvent: RatingEvent($rating: rating && rating.getActivity().getAlarm() == null 
+        							&& rating.getActivity().getAverage() <= 3 );
+        $usersCnt: Number(intValue >= 4) from accumulate(
+            Rating($r: rating) from $rating.getActivity().getRatings(),
+            count($r)
+        );
+    then
+    	$rating.getActivity().setAlarm(LocalDate.now());
+    	System.out.println("WARNING!!!!: The rating of activity: " + $rating.getActivity().getName()+  " is very bad => " + $rating.getActivity().getAverage());
+end;
+
+rule "Activity average rating got over 3"
+	agenda-group "rating"
+	salience 90
+    when
+        $ratingEvent: RatingEvent($rating: rating && rating.getActivity().getAlarm() != null
+        							&& rating.getActivity().getAverage() > 3 );
+    then
+    	$rating.getActivity().setAlarm(null);
+    	System.out.println("INFO: The rating of activity: " + $rating.getActivity().getName()+  " has increased => " + $rating.getActivity().getAverage());
+end;

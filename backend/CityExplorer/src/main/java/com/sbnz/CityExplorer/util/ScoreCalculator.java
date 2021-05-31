@@ -26,6 +26,9 @@ public class ScoreCalculator {
 	}
 
 	public int calculateScore(Activity activity, ActivityRequirements requirements) {
+		if((requirements.getPrices()== null) && requirements.getPrices().isEmpty()) {
+			return -50;
+		}
 		System.out.println("Calculating score for " + activity.getName());
 		
 		int score = 0;
@@ -108,11 +111,10 @@ public class ScoreCalculator {
 		RegisteredUser u = getCurrentUser();
 		List<Activity> previous = u.getRecommendedActivities();
 		if((previous!= null) && previous.contains(activity)) {
-			score -= 5;
+			score -= 10;
 		}
-		
-		activity.setScore(score);
-		
+
+		System.out.println("Score for " + activity.getName() + " is " + score);
 		return score;
 	}
 	

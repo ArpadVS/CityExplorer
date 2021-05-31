@@ -4,13 +4,14 @@ import com.sbnz.CityExplorer.dto.UserRequirementsDTO;
 import com.sbnz.CityExplorer.dto.ActivityDTO;
 import java.util.List;
 
+global Activity best;
+
 rule "Start"
     agenda-group "recommend"
     salience 1000
     when
     	UserRequirementsDTO()
     	ActivityRequirements()
-    	
     then
         System.out.println( "Started recommendation!" );
         //best.setName("changed");
@@ -19,28 +20,30 @@ end;
 rule "Going with family"
 	salience 100
 	agenda-group "recommend"
+	lock-on-active true
 	when
 		userRequirements: UserRequirementsDTO( companion=="FAMILY");
 		activityRequirements: ActivityRequirements();
 	then
 		modify(activityRequirements){getFeatures().getKeywords().add(Keywords.FAMILY_FRIENDLY);};
-		System.out.println(activityRequirements.toString());	
+		System.out.println("Family friendly preferred");	
 end;
 
 rule "Family friendly keywords means childrens program"
 	salience 80
 	agenda-group "recommend"
-	no-loop 
+	lock-on-active true
 	when
 		activityRequirements: ActivityRequirements( features.keywords  contains Keywords.FAMILY_FRIENDLY);
 	then
 		modify(activityRequirements){getFeatures().setChildrensProgram(true);};
-		System.out.println(activityRequirements.toString());	
+		System.out.println("Childreds program preferred");	
 end;
 
 rule "Special occasion with partner"
 	salience 100
 	agenda-group "recommend"
+	lock-on-active true
 	when
 		userRequirements: UserRequirementsDTO( special == true && companion == "PARTNER" );
 		activityRequirements: ActivityRequirements();
@@ -48,70 +51,74 @@ rule "Special occasion with partner"
 		modify(activityRequirements){getFeatures().getKeywords().add(Keywords.LUXURY);};
 		modify(activityRequirements){getFeatures().getKeywords().add(Keywords.ROMANTIC);};
 		modify(activityRequirements){getFeatures().setSpace(Space.StringToEnum("SMALL"));};
-		System.out.println(activityRequirements.toString());	
+		System.out.println("Luxury and romantic preferred");	
 end;
 
 rule "Special occasion with colleagues "
 	salience 100
 	agenda-group "recommend"
+	lock-on-active true
 	when
 		userRequirements: UserRequirementsDTO( special == true && companion == "COLLEAGUES" );
 		activityRequirements: ActivityRequirements();
 	then
 		modify(activityRequirements){getFeatures().getKeywords().add(Keywords.TEAMBUILDING);};
-		System.out.println(activityRequirements.toString());	
+		System.out.println("Teambuilding activityies preferred");	
 end;
 
 rule "Teambuildings need option for reservation"
 	salience 80
 	agenda-group "recommend"
-	no-loop  
+	lock-on-active true
 	when
 		activityRequirements: ActivityRequirements( features.keywords  contains Keywords.TEAMBUILDING);
 	then
 		modify(activityRequirements){getFeatures().setReservations(true);};
-		System.out.println(activityRequirements.toString());	
+		System.out.println("Reservation preferred");	
 end;
 
 
 rule "Normal occasion with colleagues - business meeting"
 	salience 100
 	agenda-group "recommend"
+	lock-on-active true
 	when
 		userRequirements: UserRequirementsDTO( special == false && companion == "COLLEAGUES" );
 		activityRequirements: ActivityRequirements();
 	then
 		modify(activityRequirements){getFeatures().getKeywords().add(Keywords.LUXURY);};
-		System.out.println(activityRequirements.toString());	
+		System.out.println("Luxury is preferred - nonspecial colleagues");	
 end;
 
 
 rule "Going alone or with friends without a special occasion"
 	salience 100
 	agenda-group "recommend"
+	lock-on-active true
 	when
 		userRequirements: UserRequirementsDTO( special == false && (companion == "ALONE" || companion == "FRIENDS" ))
 		activityRequirements: ActivityRequirements()
 	then
 		modify(activityRequirements){getFeatures().getKeywords().add(Keywords.CHILL);};
-		System.out.println(activityRequirements.toString());	
+		System.out.println("Non special with friends or alone");	
 end;
 
 rule "Chill activities also include access to wifi and tv"
 	salience 80
 	agenda-group "recommend"
-	no-loop  
+	lock-on-active true
 	when
 		activityRequirements: ActivityRequirements( features.keywords  contains Keywords.CHILL)
 	then
 		modify(activityRequirements){getFeatures().setWifi(true);};
 		modify(activityRequirements){getFeatures().setTv(true);};
-		System.out.println(activityRequirements.toString());	
+		System.out.println("Wifi + tv is ok");	
 end;
 
 rule "Outdoor activities are preferred when the weather is good"
 	salience 100
 	agenda-group "recommend"
+	lock-on-active true
 	when
 		$userRequirements: UserRequirementsDTO($today : date )
 		activityRequirements: ActivityRequirements()
@@ -124,6 +131,7 @@ end;
 rule "Transportation by foot"
 	salience 100
 	agenda-group "recommend"
+	lock-on-active true
 	when
 		$userRequirements: UserRequirementsDTO( transportation == "BY_FOOT" )
 		activityRequirements: ActivityRequirements()
@@ -135,6 +143,7 @@ end;
 rule "Transportation by bus"
 	salience 100
 	agenda-group "recommend"
+	lock-on-active true
 	when
 		$userRequirements: UserRequirementsDTO( transportation == "BUS" )
 		activityRequirements: ActivityRequirements()
@@ -146,6 +155,7 @@ end;
 rule "Transportation by car"
 	salience 100
 	agenda-group "recommend"
+	lock-on-active true
 	when
 		$userRequirements: UserRequirementsDTO( transportation == "AUTO" )
 		activityRequirements: ActivityRequirements()
@@ -157,6 +167,7 @@ end;
 rule "Activities with bigger space for more than 5 people"
 	salience 100
 	agenda-group "recommend"
+	lock-on-active true
 	when
 		$userRequirements: UserRequirementsDTO( numPeople > 5 , numPeople <=10 )
 		activityRequirements: ActivityRequirements()
@@ -168,6 +179,7 @@ end;
 rule "Activities with huge space for more than 10 people"
 	salience 100
 	agenda-group "recommend"
+	lock-on-active true
 	when
 		$userRequirements: UserRequirementsDTO( numPeople > 10 )
 		activityRequirements: ActivityRequirements()
@@ -180,6 +192,7 @@ end;
 rule "Activitys with a basic theme"
 	salience 100
 	agenda-group "recommend"
+	lock-on-active true
 	when
 		$userRequirements: UserRequirementsDTO( $t: theme,  theme == "NATURE" || theme == "ADRENALINE" ||
 		 theme == "HISTORY" || theme == "SPORT" )
@@ -192,6 +205,7 @@ end;
 rule "Free activities are preferred"
 	salience 100
 	agenda-group "recommend"
+	lock-on-active true
 	when
 		$userRequirements: UserRequirementsDTO( price contains "FREE" )
 		activityRequirements: ActivityRequirements()
@@ -203,6 +217,7 @@ end;
 rule "Cheap activities are preferred"
 	salience 100
 	agenda-group "recommend"
+	lock-on-active true
 	when
 		$userRequirements: UserRequirementsDTO( price contains "CHEAP" )
 		activityRequirements: ActivityRequirements()
@@ -214,6 +229,7 @@ end;
 rule "Moderately priced activities are preferred"
 	salience 100
 	agenda-group "recommend"
+	lock-on-active true
 	when
 		$userRequirements: UserRequirementsDTO( price contains "MODERATE" )
 		activityRequirements: ActivityRequirements()
@@ -225,6 +241,7 @@ end;
 rule "EXPENSIVE activities are no problem"
 	salience 100
 	agenda-group "recommend"
+	lock-on-active true
 	when
 		$userRequirements: UserRequirementsDTO( price contains "EXPENSIVE" )
 		activityRequirements: ActivityRequirements()
@@ -236,6 +253,7 @@ end;
 rule "End"
     agenda-group "recommend"
     salience 79
+	lock-on-active true
     when
     	UserRequirementsDTO()
     	$a: ActivityRequirements()

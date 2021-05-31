@@ -1,0 +1,37 @@
+<!--
+<mat-card (click) = "getDetails(activity.id)" class="box" >
+    <div class="row" style="height: fit-content;">
+        <div class="col" style="height: 230px;" > 
+            <img class="col" src={{activity.imageUrl}} height="100%" > 
+        </div>
+        <div class="col">                   
+                 <mat-card-title>{{activity.name}} 
+                    <button mat-mini-fab  color="warn" >
+                        {{activity.report.average}}
+                      </button>
+                </mat-card-title>
+      
+            <br>
+            <p class="description">{{activity.description}}</p> 
+        </div>
+    </div>
+</mat-card>-->
+
+<div>
+    <div class="float-container">
+      <div class="float-child card"(click)="getDetails(activity.id)">
+        <img class="card-img-top" src={{activity.imageUrl}} width="220" height="220" alt="Card image cap">
+        <div class="card-body">
+  
+          <p class="card-text">
+            <strong>{{ activity.name}}</strong>
+          </p>
+          <br>
+          <div style="border-top: 15px;"><b>{{activity.address}}</b></div><br>
+          <mat-divider></mat-divider>
+          <p class="description">{{activity.description}}</p>
+  
+        </div>
+      </div>
+    </div>
+  </div>

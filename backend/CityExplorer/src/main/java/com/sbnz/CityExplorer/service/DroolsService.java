@@ -36,7 +36,9 @@ public class DroolsService {
 	}
 
 	public void releaseRulesSession() {
-		this.rulesSession.dispose();
+		if(this.rulesSession != null) {
+			this.rulesSession.dispose();
+		}
 		this.rulesSession = null;
 	}
 

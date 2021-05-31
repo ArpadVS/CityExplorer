@@ -7,7 +7,7 @@ import { ProfileComponent } from './user/profile/profile.component';
 import { CartComponent } from './products/cart/cart.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { RoleGuard } from './core/guards/role.guard';
-import { ProductPageComponent } from './products/product-page/product-page.component';
+import { RecommendationComponent } from './recommendation/recommendation.component';
 import { ActivityDetailedComponent } from './activities/activity-detailed/activity-detailed.component'
 
 
@@ -17,10 +17,10 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {
-    path: 'products',
-    component: ProductPageComponent,
+    path: 'recommend',
+    component: RecommendationComponent,
     canActivate: [RoleGuard],
-    data: {expectedRoles: 'ROLE_REGISTERED_USER|ROLE_ADMIN'}
+    data: {expectedRoles: 'ROLE_REGISTERED_USER'}
   },
   {
     path: 'profile',

@@ -3,6 +3,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Activity } from 'src/app/models/activity.model';
+import { UserRequirementsDTO } from 'src/app/models/requirements.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,11 @@ export class ActivityService {
 
   getOne(id :number ): Observable<Activity> {
     return this.http.get<Activity>(this.activityPath + '/details/' + id, {headers: this.headers, responseType: 'json'});
+  }
+
+  getRecommendation(requirements: UserRequirementsDTO): Observable<any> {
+    return this.http.post(this.activityPath + '/getRecommendation', requirements,
+      {headers: this.headers, responseType: 'json'});
   }
   
 }

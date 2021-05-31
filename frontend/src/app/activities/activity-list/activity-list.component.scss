@@ -3,6 +3,7 @@
     padding-bottom: 0;
     display: inline-block;
     width: 100%;
+;
 }
 
 .float-child {
@@ -19,7 +20,7 @@
           -o-box-shadow: 0 0 10px  rgba(0,0,0,0.6);
           flex: 0 1 calc(23.3% - 22px);
     background-color: #d6e8ff;
-    overflow: hidden;
+    overflow:hidden;
     cursor: pointer;
 }  
 
@@ -66,7 +67,7 @@
   }
 
   .chipwrapper {
-    display: flex;   flex-direction: row;   justify-content: space-around;
+    display: flex;   flex-direction: row;   justify-content: space-around; 
   }
 
   .chipchip {
