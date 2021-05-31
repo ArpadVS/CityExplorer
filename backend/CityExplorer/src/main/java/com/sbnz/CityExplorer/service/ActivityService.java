@@ -204,7 +204,7 @@ public class ActivityService {
 			}
 			ratingRepository.save(newRating);
 			activity.getRatings().add(newRating);
-			RatingEvent ratingEvent = new RatingEvent(new Date(), newRating);
+			RatingEvent ratingEvent = new RatingEvent(new Date(), newRating, logged.getId());
 
 			KieSession ks = droolsService.getEventsSession();
 			ks.insert(ratingEvent);

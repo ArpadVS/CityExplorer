@@ -57,7 +57,6 @@ public class ActivityController {
 	@PreAuthorize("hasAuthority('ROLE_REGISTERED_USER')")
 	public ResponseEntity<Boolean> rateActivity(@RequestBody RatingDTO dto) {
 		boolean result = activityService.rateActivity(dto);
-		System.out.println("im rating " + dto.getRating());
 		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
 	}
 

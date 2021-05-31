@@ -7,6 +7,14 @@ declare ProcessedEvent
 	eventDate: String
 end
 
+
+declare PossibleReviewBombEvent
+    @role(event)
+    @expires(3m)
+    id: Long
+    reason: String
+end;
+
 rule "Rating event"
 	agenda-group "rating"
 	salience 100
@@ -47,4 +55,33 @@ rule "Activity average rating got over 3"
     then
     	$rating.getActivity().setAlarm(null);
     	System.out.println("INFO: The rating of activity: " + $rating.getActivity().getName()+  " has increased => " + $rating.getActivity().getAverage());
+end;
+
+
+rule "Log 1 star ratings"
+	agenda-group "rating"
+	salience 90
+    when
+        RatingEvent(rating.getRating() == 1)
+    then
+    	System.out.println("New 1 star rating");
+end;
+
+rule "Reviewbomb alert - user gives five or more 1 star reviews in 1 minute"
+	agenda-group "rating"
+	salience 90
+    when
+        $t1: RatingEvent($rating: rating && $id : userId && rating.getRating() == 1)
+        Number(intValue >= 4) from accumulate(
+            $t2: RatingEvent(
+                this != $t1, 
+                userId == $id) over window:time( 1m ),
+            count($t2)
+        )
+        not (PossibleReviewBombEvent(id == $id, 
+        	reason == "5 negative reviews from 1 user in 1 minute."))
+    then
+    	String reason = "5 negative reviews from 1 user in 1 minute.";
+        insert(new PossibleReviewBombEvent($id, reason));
+    	System.out.println("!!!!ALERT!!!! POSSIBLE REVIEW BOMB FROM USER WITH ID " + $id);
 end;

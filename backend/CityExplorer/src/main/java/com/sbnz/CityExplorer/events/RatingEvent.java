@@ -17,13 +17,16 @@ public class RatingEvent implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Date executionTime;
 	private Rating rating;
+	private Long userId;
 
 	public RatingEvent() {
 	}
 
-	public RatingEvent(Date executionTime, Rating Rating) {
+	public RatingEvent(Date executionTime, Rating rating, Long userId) {
+		super();
 		this.executionTime = executionTime;
-		this.rating = Rating;
+		this.rating = rating;
+		this.userId = userId;
 	}
 
 	public Date getExecutionTime() {
@@ -40,6 +43,14 @@ public class RatingEvent implements Serializable {
 
 	public void setRating(Rating Rating) {
 		this.rating = Rating;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public static long getSerialversionuid() {
