@@ -57,16 +57,6 @@ rule "Activity average rating got over 3"
     	System.out.println("INFO: The rating of activity: " + $rating.getActivity().getName()+  " has increased => " + $rating.getActivity().getAverage());
 end;
 
-
-rule "Log 1 star ratings"
-	agenda-group "rating"
-	salience 90
-    when
-        RatingEvent(rating.getRating() == 1)
-    then
-    	System.out.println("New 1 star rating");
-end;
-
 rule "Reviewbomb alert - user gives five or more 1 star reviews in 1 minute"
 	agenda-group "rating"
 	salience 90

@@ -1,5 +1,6 @@
 package com.sbnz.CityExplorer.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -14,6 +15,12 @@ public class RegisteredUser extends User {
 
 	public RegisteredUser() {
 		super();
+	}
+	
+	public RegisteredUser(Long id, String uname, ArrayList<Activity> recommended) {
+		this.setId(id);
+		this.setUsername(uname);
+		this.setRecommendedActivities(recommended);
 	}
 
 	public RegisteredUser(List<Activity> recommendedActivities) {

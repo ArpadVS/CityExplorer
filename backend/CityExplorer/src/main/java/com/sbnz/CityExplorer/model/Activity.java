@@ -48,6 +48,13 @@ public class Activity {
 		this.imageUrl = "";
 	}
 
+	public Activity(Long id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.ratings = new HashSet<Rating>();
+	}
+
 	public Long getId() {
 		return id;
 	}

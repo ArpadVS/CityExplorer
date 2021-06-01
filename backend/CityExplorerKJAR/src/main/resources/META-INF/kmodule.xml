@@ -4,6 +4,6 @@
         <ksession name="rulesSession"/>
     </kbase>
     <kbase  name="events" eventProcessingMode="stream" packages="events" default="true">
-        <ksession name="eventsSession"/>
+        <ksession name="eventsSession" clockType="pseudo"/>
     </kbase>
 </kmodule>

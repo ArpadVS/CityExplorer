@@ -1,6 +1,7 @@
 package com.sbnz.CityExplorer.dto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.sbnz.CityExplorer.model.Features;
@@ -16,6 +17,8 @@ public class UserRequirementsDTO {
 
 	public UserRequirementsDTO() {
 		super();
+		this.date = LocalDate.now();
+		this.price = new ArrayList<String>();
 	}
 
 	public UserRequirementsDTO(List<String> price, String companion, int numPeople, String transportation, String theme,
