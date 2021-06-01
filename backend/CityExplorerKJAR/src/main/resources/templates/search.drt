@@ -16,7 +16,7 @@ template "searchByName-rules"
 rule "Get activities by name_@{row.rowNumber}"
 no-loop true
 when
-	$activity: Activity(name.toLowerCase().contains("@{name}".toLowerCase()));
+	$activity: Activity(name.toLowerCase().contains("@{name}".toLowerCase()) || description.toLowerCase().contains("@{name}".toLowerCase()));
 then
 	result.add($activity);
 end

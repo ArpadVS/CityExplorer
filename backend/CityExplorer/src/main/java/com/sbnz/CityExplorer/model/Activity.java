@@ -34,7 +34,7 @@ public class Activity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Rating> ratings;
 	@Column
-	private Integer score;
+	private int score;
 	@Column
 	private Double average;
 	@Column
@@ -111,11 +111,11 @@ public class Activity {
 		this.ratings = ratings;
 	}
 
-	public Integer getScore() {
+	public int getScore() {
 		return score;
 	}
 
-	public void setScore(Integer score) {
+	public void setScore(int score) {
 		this.score = score;
 	}
 

@@ -33,6 +33,12 @@ public class ScoreCalculator {
 		
 		int score = 0;
 		
+		/*
+		if(activity.getAverage() != null) {
+			System.out.println("RATINGS \t");
+			score += (int)Math.round(activity.getAverage());
+		}*/
+		
 		if(requirements.getPrices().contains(activity.getFeatures().getPrice())) {
 			System.out.println("PRICE \t");
 			score += 4;

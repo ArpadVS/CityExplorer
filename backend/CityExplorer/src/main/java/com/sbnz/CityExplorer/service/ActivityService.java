@@ -148,7 +148,6 @@ public class ActivityService {
 		KieSession ks = droolsService.getKieContainer().newKieSession("rulesSession");
 		ks.getAgenda().getAgendaGroup("recommend").setFocus();
 		ks.setGlobal("best", bestScored);
-		ks.setGlobal("bestScore", Integer.valueOf(0));
 		ks.setGlobal("calc", sc);
 		ks.insert(dto);
 		ks.insert(requirements);
@@ -163,7 +162,7 @@ public class ActivityService {
 		RegisteredUser u = getCurrentUser();
 		if (!u.getRecommendedActivities().contains(bestScored)) {
 			u.getRecommendedActivities().add(bestScored);
-			// userRepository.save(u);
+			userRepository.save(u);
 		}
 
 		ks.dispose();

@@ -7,15 +7,10 @@ import com.sbnz.CityExplorer.util.ScoreCalculator;
 import com.sbnz.CityExplorer.dto.UserRequirementsDTO;
 import com.sbnz.CityExplorer.dto.ActivityDTO;
 import java.lang.Integer;
-import java.util.List;
+import java.util.*;
 
 global Activity best;
-global Integer bestScore;
 global ScoreCalculator calc;
-
-declare BestScore
-	value : Integer
-end;
 
 declare FoundBest
 end;
@@ -29,8 +24,12 @@ rule "Calculate score for each activity based on requirements"
 		$activity: Activity($name: name, $score: score);
     then	
 		int score = calc.calculateScore($activity,$req);
-		modify($activity){setScore(score)};
-    	System.out.println("Activity " + $name + ", Score: " + score );  	
+		$activity.setScore(score);
+    	System.out.println("Activity " + $name + ", Score: " + score  ); 
+    	if($req.getBestScore() < score){
+    		$req.setBestScore(score);
+    		System.out.println($req.getBestScore());
+    	}
 end;
 
 
@@ -45,48 +44,35 @@ rule "IPrint activities"
 	
 end
 
+
 rule "The Best Activity score"
 	agenda-group "recommend"
 	salience 55
 	lock-on-active 
     when
-		$a : Activity($maxScore : score, $id : id)
-		not Activity(score > $maxScore, id != $id)
+    	$req : ActivityRequirements()
+		$a : Activity()
+		not(FoundBest())
     then	
-    	drools.getKnowledgeRuntime().setGlobal("b", $maxScore);
-		//insert (new BestScore($maxScore));
-    	System.out.println("=========================" );  	
-    	System.out.println("Biggest score is " + $maxScore + "for" + $id);  
+		if($req.getBestScore() == $a.getScore()){
+	    	System.out.println("=========================" );  	
+	    	System.out.println("Biggest score is " + $a.getScore() + " for " + $a.getId());  
+	    	System.out.println("from req is " + $req.getBestScore() + "from activity is " + $a.getScore());  	
+    		drools.getKnowledgeRuntime().setGlobal("best", $a);
+    		insert(new FoundBest());
+    	}
 end;
-
-/*
-rule "Find one with best score (if more with same score)"
-	agenda-group "recommend"
-	salience 50
-	lock-on-active 
-    when
-    	BestScore($sc : value)
-//		$a: Activity(score == $sc)
-	//	not FoundBest()
-    then	
-    	//drools.getKnowledgeRuntime().setGlobal("bestScore", $maxValue);
-    	System.out.println("Found one best" );  	
-    	//System.out.println( $a.toString() );
-    	insert(new FoundBest());
-end;*/
-
 
 rule "Reset score for activities to 0"
     agenda-group "recommend"
     salience -50
     lock-on-active 
-    enabled false
+    enabled true
     when
 		$a : Activity()
     then
     	modify($a){setScore(0)};
         System.out.println( "Score reset to " + $a.getScore() + " for " + $a.getName());
-        System.out.println( bestScore );
 end;
 
 /*

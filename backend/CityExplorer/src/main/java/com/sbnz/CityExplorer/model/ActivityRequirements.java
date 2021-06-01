@@ -11,6 +11,8 @@ public class ActivityRequirements {
 	private List<Price> prices;
 	private Features features;
 
+	private int bestScore;
+
 	public ActivityRequirements() {
 		this.features = new Features();
 		this.features.setBusNearby(false);
@@ -20,6 +22,7 @@ public class ActivityRequirements {
 		this.features.setParking(false);
 		this.features.setPrice(Price.FREE);
 		this.prices = new ArrayList<Price>();
+		this.bestScore = 0;
 
 	}
 
@@ -45,6 +48,14 @@ public class ActivityRequirements {
 
 	public void setFeatures(Features features) {
 		this.features = features;
+	}
+
+	public int getBestScore() {
+		return bestScore;
+	}
+
+	public void setBestScore(int bestScore) {
+		this.bestScore = bestScore;
 	}
 
 	@Override
