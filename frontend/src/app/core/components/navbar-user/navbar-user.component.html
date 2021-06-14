@@ -5,10 +5,14 @@
         <mat-icon>near_me</mat-icon>
     </div>
 
-    <span class="spacer"></span>
-
+    
+    <button  mat-button  [routerLink]="['/home']">
+        <mat-icon>local_activity</mat-icon>
+        <span>Activities</span>
+    </button>
 
     <div>
+        
         <button mat-button [routerLink]="['/login']" id="login-btn">
             <mat-icon>input</mat-icon>
             <span>Login</span>

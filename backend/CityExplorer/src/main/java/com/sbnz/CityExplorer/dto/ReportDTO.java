@@ -95,12 +95,12 @@ public class ReportDTO {
 		this.numOfRatings = numOfRatings;
 	}
 
-	public int getMyReview() {
+	public int getMyRating() {
 		return myRating;
 	}
 
-	public void setMyReview(int myReview) {
-		this.myRating = myReview;
+	public void setMyRating(int myRating) {
+		this.myRating = myRating;
 	}
 
 }

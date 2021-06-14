@@ -20,6 +20,8 @@ import { ActivityListComponent } from './activities/activity-list/activity-list.
 import { ActivityDetailedComponent } from './activities/activity-detailed/activity-detailed.component';
 import { RecommendationComponent } from './recommendation/recommendation.component';
 import { ActivitySimpleComponent } from './activities/activity-simple/activity-simple.component';
+import { ChartsModule } from 'ng2-charts';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -54,7 +56,9 @@ import { ActivitySimpleComponent } from './activities/activity-simple/activity-s
     CoreModule,
     UserModule,
     TooltipModule.forRoot(),
-    ProductsModule
+    ProductsModule,
+    ChartsModule,
+    NgbModule
 
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}],

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Activity } from 'src/app/models/activity.model';
 import { UserRequirementsDTO } from 'src/app/models/requirements.model';
+import { Rating } from 'src/app/models/rating.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,12 @@ export class ActivityService {
 
   getRecommendation(requirements: UserRequirementsDTO): Observable<any> {
     return this.http.post(this.activityPath + '/getRecommendation', requirements,
+      {headers: this.headers, responseType: 'json'});
+  }
+
+  
+  rateActivity(rating: Rating): Observable<any> {
+    return this.http.post(this.activityPath + '/rate', rating,
       {headers: this.headers, responseType: 'json'});
   }
   

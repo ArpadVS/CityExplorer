@@ -5,7 +5,11 @@
     </div>
 
     <div style="margin-left: 10px;">
-      <button id="test" mat-button  [routerLink]="['/recommend']">
+      <button  mat-button  [routerLink]="['/home']">
+        <mat-icon>local_activity</mat-icon>
+        <span>Activities</span>
+      </button>
+      <button mat-button  [routerLink]="['/recommend']">
         <mat-icon>location_city</mat-icon>
         <span>Get a recommendation</span>
       </button>

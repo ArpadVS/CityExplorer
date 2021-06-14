@@ -1,0 +1,45 @@
+  .star {
+    position: relative;
+    display: inline-block;
+    font-size: 2rem;
+    color: #d3d3d3;
+  }
+  .full {
+    color: yellow;
+  }
+  .half {
+    position: absolute;
+    display: inline-block;
+    overflow: hidden;
+    color: yellow;
+  }
+
+  .activityContent {
+    font-size: 18px;
+  }
+
+  h4 {
+    color: #FF6A5C;
+}
+
+
+.chip mat-chip{
+  background-color: lawngreen;
+  font-size: large;
+}
+
+.detailsBox{
+  width: 60%;
+  float: inherit;
+  margin: 2%;
+  text-align: center;
+  opacity: 0.9;
+      border: solid 1.5px gray ;
+        box-shadow:  0 0 10px  rgba(0,0,0,0.6);
+        -moz-box-shadow: 0 0 10px  rgba(0,0,0,0.6);
+        -webkit-box-shadow: 0 0 10px  rgba(0,0,0,0.6);
+        -o-box-shadow: 0 0 10px  rgba(0,0,0,0.6);
+        flex: 0 1 calc(23.3% - 22px);
+  background-color: #d6e8ff;
+  overflow:auto;
+}

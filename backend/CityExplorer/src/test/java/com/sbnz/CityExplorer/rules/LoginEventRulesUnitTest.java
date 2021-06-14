@@ -11,16 +11,22 @@ import java.util.concurrent.TimeUnit;
 
 import org.drools.core.time.SessionPseudoClock;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.sbnz.CityExplorer.events.BadCredentialsEvent;
 import com.sbnz.CityExplorer.model.Activity;
 import com.sbnz.CityExplorer.model.RegisteredUser;
 import com.sbnz.CityExplorer.repository.UserRepository;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class LoginEventRulesUnitTest {
 
 	@MockBean
@@ -58,7 +64,7 @@ public class LoginEventRulesUnitTest {
 			assertTrue(ruleCount == 0);
 		}
 
-		clock.advanceTime(30, TimeUnit.MINUTES); // waiting for events to disappar
+		clock.advanceTime(30, TimeUnit.MINUTES); // waiting for events to disappear
 
 		// testing for warning - 10 failed login in 3 minutes
 		for (int i = 0; i < 6; i++) {

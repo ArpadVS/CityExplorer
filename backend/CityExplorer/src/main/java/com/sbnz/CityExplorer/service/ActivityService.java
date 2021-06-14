@@ -91,9 +91,11 @@ public class ActivityService {
 				}
 			}
 			double average = 0;
+			
 			if (ratingNum != 0) {
-				average = ratingSum / ratingNum;
+				average = ratingSum * 1.0 / ratingNum;
 			}
+			System.out.println("rating is " + average);
 			ReportDTO reportDTO = new ReportDTO(average, ratingNum, ones, twos, threes, fours, fives, userReview);
 			restDTO = ActivityDTOConverter.convertToDTO(activity, reportDTO);
 		}

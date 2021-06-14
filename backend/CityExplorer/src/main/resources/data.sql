@@ -61,9 +61,9 @@ INSERT INTO activity (id,address,description,location,name,features_id, score, i
 (104,'Fruska Gora', 'Explore the hidden hiking paths of Fruska Gora.', 'OUTSIDE_THE_CITY', 'Hiking Fruska gora', 104, 0, 'https://explore-serbia.rs/wp-content/uploads/2018/12/Fru%C5%A1ka-Gora-hiking-scaled-e1575387407623.jpg', 0),
 (105,'Primorska 55', 'Best place to cool off and have fun!', 'SUBURBS', 'Trambouline park Amplitudo', 105, 0, 'https://www.funfactorystudio.com/ffs/wp-content/uploads/2020/07/Amplituda-Trambolina-park-Novi-Sad-46.jpg', 0),
 (106,'Trg Slobode', 'Discover the city in the most romantic way!', 'CITY_CENTER', 'Travelling with a horse carriage', 106, 0, 'https://image.jimcdn.com/app/cms/image/transf/dimension=1920x400:format=jpg/path/sa6549607c78f5c11/image/id8ba0b5a1c652fa5/version/1574940303/image.jpg', 3.5),
-(107,'Bulevar oslobođenja 27', 'Ice hockey, bowling, table tennis, biliard.. You chose what you want to try!', 'CITY_CENTER', 'Bowling club Zabac', 107, 0, 'https://zabac.rs/wp-content/uploads/2018/11/DAC_8679.jpg', 3.5),
-(108,'Novosadskog sajma 35', 'Relaxing massages, luxury private pool and saunas wait for you!', 'CITY_CENTER', 'Spa day at Hotel Park', 108, 0, 'http://www.wellnesshotelparkns.com/images/slideshow/slide-jacuzzi.jpg', 3.5),
-(109,'Petrovaradin fortress', 'Learn about the history of Novi Sad and the serbian culture!', 'SUBURBS', 'Visiting the City Museum', 109, 0, 'http://www.panacomp.net/wp-content/uploads/2016/03/dsc_03121.jpg', 3.5);
+(107,'Bulevar oslobođenja 27', 'Ice hockey, bowling, table tennis, biliard.. You chose what you want to try!', 'CITY_CENTER', 'Bowling club Zabac', 107, 0, 'https://zabac.rs/wp-content/uploads/2018/11/DAC_8679.jpg', 3),
+(108,'Novosadskog sajma 35', 'Relaxing massages, luxury private pool and saunas wait for you!', 'CITY_CENTER', 'Spa day at Hotel Park', 108, 0, 'http://www.wellnesshotelparkns.com/images/slideshow/slide-jacuzzi.jpg', 3),
+(109,'Petrovaradin fortress', 'Learn about the history of Novi Sad and the serbian culture!', 'SUBURBS', 'Visiting the City Museum', 109, 0, 'http://www.panacomp.net/wp-content/uploads/2016/03/dsc_03121.jpg', 3);
 
 
 INSERT INTO rating(id, creation, rating, activity_id, user_id) VALUES

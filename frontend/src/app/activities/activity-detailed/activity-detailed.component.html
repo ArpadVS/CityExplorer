@@ -1,1 +1,90 @@
-<p>activity-detailed works! Id is {{ activityId }}</p>
+<div class="detailsBox" *ngIf = "activity" style=" margin: auto; margin-top: 5%; margin-bottom: 5%;">
+        <div class="text-center" style="margin-top: 10px;">
+            <img style="display: block; margin: auto;" src={{activity.imageUrl}}  alt="..." width="400" height="300">
+            <h2>{{activity.name}} </h2>
+            <span style="font-size: 1rem;">
+            <ng-template #t let-fill="fill">
+                <span class="star" [class.full]="fill === 100">
+                    <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+                </span>
+            </ng-template>
+            <ngb-rating style="height: 22px;" [rate]="activity.report.average" [starTemplate]="t" [readonly]="true" [max]="5"></ngb-rating>
+            ( {{activity.report.numOfRatings}} )
+            </span>
+        </div><br>
+
+        <!--*ngIf = "this.role === 'ROLE_REGISTERED_USER'"-->
+    <!--Rating-->
+    <div *ngIf = "this.role === 'ROLE_REGISTERED_USER'" style="text-align: center; margin: auto; padding: 0;">
+
+        <span *ngIf="this.activity.report.myRating == 0" >
+            <pre>You have not rated this activity yet!</pre>
+            <ng-template #t let-fill="fill">
+                <span class="star" [class.full]="fill === 100">
+                    <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+                </span>
+            </ng-template>
+            <ngb-rating [starTemplate]="t" [(rate)]="selectedValue" max="5"></ngb-rating>
+            <button mat-raised-button color="basic" style="margin-left: 2em;"  (click)="rateActivity()">Rate</button>
+        </span>
+
+        <span *ngIf="this.activity.report.myRating != 0" >
+        <pre>Your rating is: <b>{{activity.report.myRating}}</b></pre>
+        <ng-template #t let-fill="fill">
+            <span class="star" [class.full]="fill === 100">
+                <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+            </span>
+        </ng-template>
+        <ngb-rating id="newRating" [starTemplate]="t" [(rate)]="selectedValue" max="5"></ngb-rating>
+        
+        <button mat-raised-button color="basic" style="margin-left: 2em;" (click)="rateActivity()">Change rating</button>
+        </span>
+    </div>
+    <br>
+        <!--Content-->
+        <div class="activityContent">
+        <h4>Location</h4>
+        <mat-divider></mat-divider>
+        {{activity.address}}
+        
+        <br><br>
+
+        <h4>Keywords</h4>
+        <mat-divider></mat-divider>
+            <span *ngFor="let item of activity.features.keywords; let i = index">{{item}} </span>
+        <br><br>
+
+
+        <h4>Features</h4>
+        <mat-divider></mat-divider>
+        <span  *ngIf = "activity.features.outdoor">Outdoor </span> 
+        <span  *ngIf = "activity.features.parking">Parking </span>
+        <span  *ngIf = "activity.features.busNearby">Bus stop nearby </span>
+        <span  *ngIf = "activity.features.tv">Tv </span>
+        <span  *ngIf = "activity.features.wifi">Wifi </span>
+        <span  *ngIf = "activity.features.childrensProgram">Program for childern </span>
+        <span  *ngIf = "activity.features.reservations">Reservations </span>
+            <br><br>
+
+        <h4>Description</h4>
+        <mat-divider></mat-divider>
+        {{activity.description}}
+        </div>
+        <br><br>
+
+        <!--Chart-->
+        <!--*ngIf = "this.role === 'ROLE_ADMIN'"
+        <div  class="chart-wrapper">
+        <canvas baseChart 
+        [datasets]="barChartData"
+        [labels]="barChartLabels"
+        [options]="barChartOptions"
+        [plugins]="barChartPlugins"
+        [legend]="barChartLegend"
+        [chartType]="barChartType">
+        </canvas>
+    </div>-->
+</div>
+
+<div style="height: 2em;">
+</div>
