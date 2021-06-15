@@ -106,7 +106,12 @@ public class ActivityService {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken) && authentication != null) {
 			String username = authentication.getName();
-			return (RegisteredUser) userRepository.findOneByUsername(username);
+			try {
+				return (RegisteredUser) userRepository.findOneByUsername(username);
+			} catch (ClassCastException e) {
+				//return null if admin
+				return null;
+			}
 		}
 		return null;
 	}

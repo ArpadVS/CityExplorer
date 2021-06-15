@@ -12,7 +12,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CoreModule } from './core/core.module';
 import { JwtInterceptor } from './core/interceptors/jwt-interceptor.interceptor';
 import { UserModule } from './user/user.module';
-import { ProductsModule } from './products/products.module'
 import { BootstrapModule } from './material/bootstrap/bootstrap.module';
 import { TooltipModule } from 'ngx-bootstrap';
 import { HomepageComponent } from './homepage/homepage.component';
@@ -20,8 +19,12 @@ import { ActivityListComponent } from './activities/activity-list/activity-list.
 import { ActivityDetailedComponent } from './activities/activity-detailed/activity-detailed.component';
 import { RecommendationComponent } from './recommendation/recommendation.component';
 import { ActivitySimpleComponent } from './activities/activity-simple/activity-simple.component';
-import { ChartsModule } from 'ng2-charts';
+import { ChartsModule, ThemeService  } from 'ng2-charts';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ReportsPageComponent } from './reports/reports-page/reports-page.component';
+import { UserSatisfactionComponent } from './reports/user-satisfaction/user-satisfaction.component';
+import { PopularityComponent } from './reports/popularity/popularity.component';
+import { AlarmsComponent } from './reports/alarms/alarms.component';
 
 
 @NgModule({
@@ -31,7 +34,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ActivityListComponent,
     ActivityDetailedComponent,
     RecommendationComponent,
-    ActivitySimpleComponent
+    ActivitySimpleComponent,
+    ReportsPageComponent,
+    UserSatisfactionComponent,
+    PopularityComponent,
+    AlarmsComponent
   ],
   imports: [
     BrowserModule,
@@ -56,12 +63,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     CoreModule,
     UserModule,
     TooltipModule.forRoot(),
-    ProductsModule,
     ChartsModule,
     NgbModule
 
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}, ThemeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

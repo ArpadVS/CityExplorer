@@ -25,13 +25,38 @@ export class ActivityDetailedComponent implements OnInit {
   // rating
   stars: number[] = [1, 2, 3, 4, 5];
   selectedValue: number;
-  // charts
-  barChartOptions: ChartOptions = { responsive: true};
-  barChartLabels: Label[];
-  barChartType: ChartType = 'bar';
-  barChartLegend = true;
-  barChartPlugins = [];
-  barChartData: ChartDataSets[];
+
+  //charts
+  showChart: boolean = false;
+
+  private barChartOptions:any = {
+    responsive: true,
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true
+          }
+        }
+      ]
+    }
+  };
+  private mbarChartLabels:string[] = ['1 star', '2 stars', '3 stars', '4 stars', '5 stars'];
+  private barChartType:string = 'bar';
+  private barChartLegend:boolean = true;
+
+  private barChartColors:Array<any> = [
+  { 
+    backgroundColor: 'rgba(77,20,96,0.3)',
+    borderColor: 'rgba(77,20,96,1)',
+    pointBackgroundColor: 'rgba(77,20,96,1)',
+    pointBorderColor: '#fff',
+    pointHoverBackgroundColor: '#fff',
+    pointHoverBorderColor: 'rgba(77,20,96,1)'
+  }];
+  private barChartData:any[] = [
+    {data: [4, 6, 7, 4, 7], label: 'Number of ratings'}
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -80,12 +105,15 @@ export class ActivityDetailedComponent implements OnInit {
       })
     );
   }
-
+  
   createChart() {
-    this.barChartLabels = ['1', '2', '3', '4', '5'];
     const report: Report = this.activity.report;
+    if(report.numOfRatings == 0) {
+      this.showChart = false
+    }
+    this.showChart = true;
     this.barChartData = [
-      { data: [report.ones, report.twos, report.threes, report.fours, report.fives], label: 'Grades' }
+      { data: [report.ones, report.twos, report.threes, report.fours, report.fives], label: 'Number of ratings' }
     ];
   }
 

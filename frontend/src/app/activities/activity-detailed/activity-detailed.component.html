@@ -41,49 +41,51 @@
         </span>
     </div>
     <br>
-        <!--Content-->
-        <div class="activityContent">
-        <h4>Location</h4>
-        <mat-divider></mat-divider>
-        {{activity.address}}
-        
+    <!--Content-->
+    <div class="activityContent">
+    <h4>Location</h4>
+    <mat-divider></mat-divider>
+    {{activity.address}}
+    
+    <br><br>
+
+    <h4>Keywords</h4>
+    <mat-divider></mat-divider>
+        <span *ngFor="let item of activity.features.keywords; let i = index">{{item}} </span>
+    <br><br>
+
+
+    <h4>Features</h4>
+    <mat-divider></mat-divider>
+    <span  *ngIf = "activity.features.outdoor">Outdoor </span> 
+    <span  *ngIf = "activity.features.parking">Parking </span>
+    <span  *ngIf = "activity.features.busNearby">Bus stop nearby </span>
+    <span  *ngIf = "activity.features.tv">Tv </span>
+    <span  *ngIf = "activity.features.wifi">Wifi </span>
+    <span  *ngIf = "activity.features.childrensProgram">Program for childern </span>
+    <span  *ngIf = "activity.features.reservations">Reservations </span>
         <br><br>
 
-        <h4>Keywords</h4>
-        <mat-divider></mat-divider>
-            <span *ngFor="let item of activity.features.keywords; let i = index">{{item}} </span>
-        <br><br>
+    <h4>Description</h4>
+    <mat-divider></mat-divider>
+    {{activity.description}}
+    </div>
+    <br><br>
 
-
-        <h4>Features</h4>
-        <mat-divider></mat-divider>
-        <span  *ngIf = "activity.features.outdoor">Outdoor </span> 
-        <span  *ngIf = "activity.features.parking">Parking </span>
-        <span  *ngIf = "activity.features.busNearby">Bus stop nearby </span>
-        <span  *ngIf = "activity.features.tv">Tv </span>
-        <span  *ngIf = "activity.features.wifi">Wifi </span>
-        <span  *ngIf = "activity.features.childrensProgram">Program for childern </span>
-        <span  *ngIf = "activity.features.reservations">Reservations </span>
-            <br><br>
-
-        <h4>Description</h4>
-        <mat-divider></mat-divider>
-        {{activity.description}}
+    <div *ngIf = "this.role === 'ROLE_ADMIN'" class="chart-wrapper">
+        <div *ngIf="this.showChart" style="display: block">
+            <canvas baseChart
+                    [datasets]="barChartData"
+                    [labels]="mbarChartLabels"
+                    [options]="barChartOptions"
+                    [colors]="barChartColors"
+                    [legend]="barChartLegend"
+                    [chartType]="barChartType"></canvas>
         </div>
-        <br><br>
-
-        <!--Chart-->
-        <!--*ngIf = "this.role === 'ROLE_ADMIN'"
-        <div  class="chart-wrapper">
-        <canvas baseChart 
-        [datasets]="barChartData"
-        [labels]="barChartLabels"
-        [options]="barChartOptions"
-        [plugins]="barChartPlugins"
-        [legend]="barChartLegend"
-        [chartType]="barChartType">
-        </canvas>
-    </div>-->
+        <div *ngIf="!this.showChart" style="display: block">
+            This activity has no ratings yet
+        </div>
+    </div>
 </div>
 
 <div style="height: 2em;">

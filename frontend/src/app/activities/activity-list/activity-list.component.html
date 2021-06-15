@@ -1,5 +1,19 @@
 <div>
+
+  <!-- Search form -->
+  <div class="input-group md-form form-sm form-2 pl-0">
+    <input class="form-control my-0 py-1 blue-border" (keydown.enter)="search($event)" type="text" placeholder="Search by name or description" [ngModelOptions]="{standalone: true}" [(ngModel)]="searchInput" aria-label="Search ">
+    <div class="input-group-append" style="cursor: pointer;"  (click) = "search($event)">
+      <span class="input-group-text blue lighten-3" id="basic-text1" ><i class="fa fa-search text-white" aria-hidden="true">
+          <mat-icon style="display: flex; ">search</mat-icon></i></span>
+    </div>
+  </div>
+
+  <!-- Activities-->
   <div class="float-container">
+    <div *ngIf="this.activities.length == 0" style="width: 100%; text-align: center;">
+      <b style="font-size: 2.5em;">No activities to show!</b>
+    </div>
     <div class="float-child card" *ngFor="let activity of activities" (click)="getDetails(activity.id)">
       <img class="card-img-top" src={{activity.imageUrl}} width="220" height="220" alt="Card image cap">
       <div class="card-body">

@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class ActivityListComponent implements OnInit {
   private activities: Activity[];
+  private searchInput: string = '';
 
   constructor(
     private activityService: ActivityService,
@@ -25,7 +26,7 @@ export class ActivityListComponent implements OnInit {
   getActivities() {
     this.activityService.getAll().subscribe(
       (response => {
-        console.log(response);
+        //console.log(response);
         if (response != null) {
           this.activities = response;
           console.log("Retrieved data");
@@ -40,6 +41,25 @@ export class ActivityListComponent implements OnInit {
   getDetails(id: number){
     let link: String = 'activity/' + id;
     this.router.navigate([link]);
+  }
+
+  search() {
+    const searchTerm : any = {'name' : this.searchInput}
+
+    this.activityService.search(searchTerm).subscribe(
+      (response => {
+        if (response != null) {   
+          this.activities = response;  
+          if(this.activities.length == 0){
+            this.toastr.warning("No activities found for given term!");
+          }     
+        }
+      }),
+      (error => {
+        this.toastr.error("Something went wrong!");
+        this.getActivities();
+      })
+    );
   }
 
 }
