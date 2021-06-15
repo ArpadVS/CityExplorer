@@ -1,5 +1,6 @@
 package com.sbnz.CityExplorer.converter;
 
+import java.sql.Date;
 import java.util.stream.Collectors;
 
 import com.sbnz.CityExplorer.dto.ActivityDTO;
@@ -22,6 +23,9 @@ public class ActivityDTOConverter {
 		dto.setImageUrl(activity.getImageUrl());
 		if(activity.getAverage() != null) {
 			dto.setAverageRating(activity.getAverage());
+		}
+		if(activity.getAlarm()!= null) {
+			dto.setAlarmCreation(Date.valueOf(activity.getAlarm()));
 		}
 		if (activity.getFeatures() != null) {
 			dto.setFeatures(ActivityDTOConverter.convertFeaturesToDTO(activity.getFeatures()));

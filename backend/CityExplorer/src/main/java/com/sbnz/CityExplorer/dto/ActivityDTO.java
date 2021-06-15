@@ -1,5 +1,7 @@
 package com.sbnz.CityExplorer.dto;
 
+import java.util.Date;
+
 public class ActivityDTO {
 
 	private Long id;
@@ -10,6 +12,7 @@ public class ActivityDTO {
 	private String imageUrl;
 	private double averageRating;
 	private FeaturesDTO features;
+	private Date alarmCreation;
 
 	private ReportDTO report;
 
@@ -87,6 +90,14 @@ public class ActivityDTO {
 
 	public void setAverageRating(double averageRating) {
 		this.averageRating = averageRating;
+	}
+
+	public Date getAlarmCreation() {
+		return alarmCreation;
+	}
+
+	public void setAlarmCreation(Date alarmCreation) {
+		this.alarmCreation = alarmCreation;
 	}
 
 	@Override

@@ -18,6 +18,7 @@ import com.sbnz.CityExplorer.dto.ActivityDTO;
 import com.sbnz.CityExplorer.dto.DissatisfiedUsersDTO;
 import com.sbnz.CityExplorer.dto.PopularityDTO;
 import com.sbnz.CityExplorer.dto.RatingRangeDTO;
+import com.sbnz.CityExplorer.dto.ReportDTO;
 import com.sbnz.CityExplorer.dto.UserActivitiesDTO;
 import com.sbnz.CityExplorer.model.Activity;
 import com.sbnz.CityExplorer.model.RegisteredUser;
@@ -37,9 +38,14 @@ public class ReportService {
 	public List<ActivityDTO> getAlarms() {
 		List<Activity> alarmed = activityRepository.findAlarmedActivities();
 		List<ActivityDTO> dtos = new ArrayList<ActivityDTO>();
+		
 		for (Activity a : alarmed) {
-			dtos.add(ActivityDTOConverter.convertToDTO(a));
+			ActivityDTO asd = ActivityDTOConverter.convertToDTO(a);
+			asd.setReport(new ReportDTO());
+			asd.getReport().setNumOfRatings(a.getRatings().size());
+			dtos.add(asd);
 		}
+		
 		return dtos;
 	}
 

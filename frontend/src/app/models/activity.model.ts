@@ -11,4 +11,5 @@ export class Activity{
     features: Features;
     report: Report;
     averageRating: number;
+    alarmCreation: Date
 }

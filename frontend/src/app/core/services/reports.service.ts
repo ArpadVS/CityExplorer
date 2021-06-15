@@ -36,7 +36,7 @@ export class ReportService {
     return this.http.get<UserSatisfaction[]>(this.path + '/getSatisfiedUsers', { headers: this.headers });
   }
 
-  getAlarms(event: PageEvent): Observable<Activity[]> {
+  getAlarms(): Observable<Activity[]> {
     return this.http.get<Activity[]>(this.path + '/getAlarms', {headers: this.headers});
   }
 
