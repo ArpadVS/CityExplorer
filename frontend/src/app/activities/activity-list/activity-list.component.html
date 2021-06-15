@@ -11,7 +11,7 @@
 
   <!-- Activities-->
   <div class="float-container">
-    <div *ngIf="this.activities.length == 0" style="width: 100%; text-align: center;">
+    <div *ngIf="this.activities && this.activities.length == 0" style="width: 100%; text-align: center;">
       <b style="font-size: 2.5em;">No activities to show!</b>
     </div>
     <div class="float-child card" *ngFor="let activity of activities" (click)="getDetails(activity.id)">

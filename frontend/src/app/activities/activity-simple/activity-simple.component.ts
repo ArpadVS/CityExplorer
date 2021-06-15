@@ -23,4 +23,8 @@ export class ActivitySimpleComponent implements OnInit {
     this.router.navigate([link]);
   }
 
+  goBack(){
+    this.router.navigate(['/home']);
+  }
+
 }

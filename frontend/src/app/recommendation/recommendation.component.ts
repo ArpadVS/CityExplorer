@@ -119,8 +119,4 @@ export class RecommendationComponent implements OnInit {
     }
   }
 
-  goBack(){
-    this.router.navigate(['/home']);
-  }
-
 }

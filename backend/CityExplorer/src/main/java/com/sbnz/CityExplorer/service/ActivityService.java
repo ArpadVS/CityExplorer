@@ -171,8 +171,8 @@ public class ActivityService {
 			u.getRecommendedActivities().add(bestScored);
 			userRepository.save(u);
 		}
-
-		ks.dispose();
+		ks.destroy();
+		this.droolsService.releaseRulesSession();
 		return retVal;
 	}
 

@@ -1,6 +1,6 @@
 <div class="container"  *ngIf="showForm">
     <mat-card class="box-card">
-    <form [formGroup]="requirementsForm" (ngSubmit)="requirementsForm.valid && submit()" noval id="reqForm">
+    <form [formGroup]="requirementsForm" noval id="reqForm">
         <div class="text">
             What kind of transportation will you take?
         </div><br>
@@ -95,7 +95,7 @@
         <mat-divider></mat-divider><br>
 
         <div class="row" style="width: 90%;"> 
-            <button mat-raised-button color="primary" type="submit" (click)='submit()'  [disabled]="!requirementsForm.valid">Recommend</button>
+            <button  mat-raised-button color="primary" type="submit" (click)='submit()'  [disabled]="!requirementsForm.valid">Recommend</button>
         </div><br>
     </form>
     </mat-card>
@@ -106,6 +106,4 @@
 <div *ngIf="showResult" style="margin: auto; width: 70%;">
     <h2 style="text-align:center;">Result:</h2><br>
     <app-activity-simple [activity]="recommendedActivity"></app-activity-simple>
-    <br>
-    <button type="submit" (click) = "goBack()"  class="btn btn-success">Back</button>
 </div>
