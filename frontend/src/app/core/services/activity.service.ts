@@ -35,6 +35,10 @@ export class ActivityService {
       {headers: this.headers, responseType: 'json'});
   }
 
+  newActivity(activity: Activity): Observable<any> {
+    return this.http.post(this.activityPath + '/new', activity,
+      {headers: this.headers, responseType: 'json'});
+  }
   
   rateActivity(rating: Rating): Observable<any> {
     return this.http.post(this.activityPath + '/rate', rating,

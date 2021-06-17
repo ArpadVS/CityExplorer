@@ -1,0 +1,49 @@
+.container{
+  width: 50%;
+  margin-left: 25%;
+  margin-right: 25%;
+}
+.text{
+  color: rgb(100, 58, 197);
+  font-size: larger;
+  justify-content: left;
+}
+
+.box{
+  margin-top: 5%;
+  width: 60%;  
+  margin-bottom: 5%;
+}
+
+.box-card {
+  margin: auto;
+  margin-top: 4%;
+  background-color: rgba(98, 154, 163, 0.309);
+  opacity: 1;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  width: 80%;
+  border: solid 1.5px  #2a669e;
+    box-shadow:  0 0 10px#2a669e;
+    -moz-box-shadow: 0 0 10px  #2a669e;
+    -webkit-box-shadow: 0 0 10px  #2a669e;
+    -o-box-shadow: 0 0 10px  #2a669e;
+    flex: 0 1 calc(23.3% - 22px);
+}
+.row{
+  width: 100%;
+  justify-content: center;
+}
+
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle{
+  border-color:rgb(66, 134, 244); 
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle{
+  color:rgb(66, 134, 244);
+  background-color:rgb(66, 134, 244) ;
+}
+
+.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+    background-color:rgba(77, 37, 255, 0.26);
+}

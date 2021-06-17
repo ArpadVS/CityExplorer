@@ -45,30 +45,36 @@
     <div class="activityContent">
     <h4>Location</h4>
     <mat-divider></mat-divider>
+    <b>
     {{activity.address}}
-    
+    </b> 
     <br><br>
 
     <h4>Keywords</h4>
     <mat-divider></mat-divider>
-        <span *ngFor="let item of activity.features.keywords; let i = index">{{item}} </span>
+        <b>| <span *ngFor="let item of activity.features.keywords; let i = index">{{item}} | </span></b> 
     <br><br>
 
 
     <h4>Features</h4>
     <mat-divider></mat-divider>
-    <span  *ngIf = "activity.features.outdoor">Outdoor </span> 
-    <span  *ngIf = "activity.features.parking">Parking </span>
-    <span  *ngIf = "activity.features.busNearby">Bus stop nearby </span>
-    <span  *ngIf = "activity.features.tv">Tv </span>
-    <span  *ngIf = "activity.features.wifi">Wifi </span>
-    <span  *ngIf = "activity.features.childrensProgram">Program for childern </span>
-    <span  *ngIf = "activity.features.reservations">Reservations </span>
-        <br><br>
+    <b>
+        | 
+        <span  *ngIf = "activity.features.outdoor">Outdoor | </span> 
+        <span  *ngIf = "activity.features.parking">Parking | </span>
+        <span  *ngIf = "activity.features.busNearby">Bus stop nearby | </span>
+        <span  *ngIf = "activity.features.tv">Tv | </span>
+        <span  *ngIf = "activity.features.wifi">Wifi | </span>
+        <span  *ngIf = "activity.features.childrensProgram">Program for childern | </span>
+        <span  *ngIf = "activity.features.reservations">Reservations | </span>
+</b>
+    <br><br>
 
     <h4>Description</h4>
     <mat-divider></mat-divider>
+    <b>
     {{activity.description}}
+    </b>
     </div>
     <br><br>
 

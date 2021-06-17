@@ -25,6 +25,7 @@ import { ReportsPageComponent } from './reports/reports-page/reports-page.compon
 import { UserSatisfactionComponent } from './reports/user-satisfaction/user-satisfaction.component';
 import { PopularityComponent } from './reports/popularity/popularity.component';
 import { AlarmsComponent } from './reports/alarms/alarms.component';
+import { ActivityNewComponent } from './activities/activity-new/activity-new.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { AlarmsComponent } from './reports/alarms/alarms.component';
     ReportsPageComponent,
     UserSatisfactionComponent,
     PopularityComponent,
-    AlarmsComponent
+    AlarmsComponent,
+    ActivityNewComponent
   ],
   imports: [
     BrowserModule,

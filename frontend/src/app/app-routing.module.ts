@@ -8,7 +8,8 @@ import { RoleGuard } from './core/guards/role.guard';
 import { RecommendationComponent } from './recommendation/recommendation.component';
 import { ActivityDetailedComponent } from './activities/activity-detailed/activity-detailed.component'
 import { ReportsPageComponent } from './reports/reports-page/reports-page.component';
-
+import { ActivityNewComponent } from "./activities/activity-new/activity-new.component"
+ 
 
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -30,6 +31,12 @@ const routes: Routes = [
   {
     path: 'reports',
     component: ReportsPageComponent,
+    canActivate: [RoleGuard],
+    data: {expectedRoles: 'ROLE_ADMIN'}
+  },
+  {
+    path: 'newActivity',
+    component: ActivityNewComponent,
     canActivate: [RoleGuard],
     data: {expectedRoles: 'ROLE_ADMIN'}
   },

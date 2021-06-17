@@ -42,7 +42,7 @@ public class ActivityController {
 	
 	@PostMapping(value = "/new")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public ResponseEntity<Boolean> search(@RequestBody ActivityDTO dto) {
+	public ResponseEntity<Boolean> newActivity(@RequestBody ActivityDTO dto) {
 		Boolean success = activityService.saveActivity(dto);
 		return new ResponseEntity<Boolean>(success, HttpStatus.OK);
 	}

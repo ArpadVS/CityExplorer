@@ -1,0 +1,82 @@
+<div class="container">
+    <mat-card class="box-card">
+        <h4>Add new activity:</h4>
+         <form class="form" [formGroup]="newActivityForm" (ngSubmit)="newActivityForm.valid && createNewActivity()">
+            <div class="row">   
+                <mat-form-field appearance="fill" class="col" >
+                    <mat-label>Name</mat-label>
+                    <input matInput type="text" formControlName='name' cdkFocusInitial>
+                </mat-form-field>
+            </div>
+            
+            <div class="row">   
+                <mat-form-field appearance="fill" class="col">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput formControlName='description'></textarea>
+                </mat-form-field>
+            </div>       
+            <div class="row">   
+                <mat-form-field appearance="fill" class="col" >
+                    <mat-label>Address</mat-label>
+                    <input matInput type="text" formControlName='address'>
+                </mat-form-field>
+            </div>       
+            <div class="row">   
+                <mat-form-field appearance="fill" class="col" >
+                    <mat-label>Link to image</mat-label>
+                    <input matInput type="text" formControlName='imageUrl'>
+                </mat-form-field>
+            </div>
+
+            <div class="row">   
+                <mat-form-field appearance="fill" class="col" >
+                    <mat-label>Prices</mat-label>
+                    <mat-select formControlName="price">
+                    <mat-option value={{price[1]}} *ngFor = "let price of priceValues" >{{price[0]}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <mat-form-field appearance="fill" class="col" >
+                    <mat-label>Space needed</mat-label>
+                    <mat-select  formControlName="space">
+                        <mat-option value={{spVal[1]}} *ngFor = "let spVal of spaceValues" >{{spVal[0]}}</mat-option>
+                    </mat-select>
+                </mat-form-field>  
+            </div>
+
+            <div class="row">
+                <mat-form-field appearance="fill" class="col" >
+                    <mat-label>Location</mat-label>
+                    <mat-select  formControlName="location">
+                        <mat-option value={{locVal[1]}} *ngFor = "let locVal of locationValues" >{{locVal[0]}}</mat-option>
+                    </mat-select>
+                </mat-form-field>  
+            </div>
+
+            <div class="row">
+                <mat-form-field appearance="fill" class="col" >
+                    <mat-label >Keywords</mat-label>
+                    <mat-select multiple formControlName="keywords">
+                        <mat-option value={{k[1]}} *ngFor = "let k of keywordsValues" >{{k[0]}}</mat-option>
+                    </mat-select>
+                </mat-form-field>  
+            </div>
+            <div class="row">
+                <mat-checkbox formControlName="parking" class="col">Parking nearby</mat-checkbox>
+                <mat-checkbox formControlName="busNearby" class="col">Bus station nearby</mat-checkbox>
+                <mat-checkbox formControlName="outdoor" class="col">Outdoor</mat-checkbox>
+            </div>
+            <div class="row">
+                <mat-checkbox formControlName="reservations" class="col">Reservations available</mat-checkbox>
+                <mat-checkbox formControlName="wifi" class="col">Wifi</mat-checkbox>
+                <mat-checkbox formControlName="tv" class="col">Tv</mat-checkbox>
+                <mat-checkbox formControlName="childrensProgram" class="col">Program for children</mat-checkbox>
+            </div>
+
+            <div  class="row">
+                <button type="submit"  [disabled]="!newActivityForm.valid" class="btn btn-success">Save</button>
+            </div>
+        </form>
+    </mat-card>
+</div>
