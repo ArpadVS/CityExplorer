@@ -39,6 +39,13 @@ public class ActivityController {
 		ActivityDTO activity = activityService.getActivity(id);
 		return new ResponseEntity<ActivityDTO>(activity, HttpStatus.OK);
 	}
+	
+	@PostMapping(value = "/new")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	public ResponseEntity<Boolean> search(@RequestBody ActivityDTO dto) {
+		Boolean success = activityService.saveActivity(dto);
+		return new ResponseEntity<Boolean>(success, HttpStatus.OK);
+	}
 
 	@PostMapping(value = "/search")
 	public ResponseEntity<List<ActivityDTO>> search(@RequestBody SearchDTO dto) {

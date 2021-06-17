@@ -54,6 +54,18 @@ public class ActivityService {
 			return dto;
 		})).collect(Collectors.toList());
 	}
+	
+	public boolean saveActivity(ActivityDTO dto) {
+		Activity a = ActivityDTOConverter.convertFromDTO(dto);
+		System.out.println(a.toString() + "created");
+		try {
+			activityRepository.save(a);
+			return true;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+	}
 
 	public ActivityDTO getActivity(Long id) {
 		Optional<Activity> ActivityOpt = activityRepository.findById(id);
