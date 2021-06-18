@@ -1,0 +1,19 @@
+.wrapper {
+    background-color: blue;
+    text-align: center;
+}
+
+.search-wrapper {
+    margin-right: auto;
+    margin-left: auto;
+    width: 60%;
+}
+
+.search-wrapper form .field-full-width {
+    width: 100%;
+}
+
+.paginator{
+    justify-content: center;
+    display: flex;
+  }

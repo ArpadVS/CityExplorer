@@ -8,6 +8,7 @@ public class RegistrationDTO {
 	private String username;
 	private String password;
 	private boolean active;
+	private long size;
 
 	public RegistrationDTO() {
 		// TODO Auto-generated constructor stub
@@ -59,6 +60,14 @@ public class RegistrationDTO {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public long getSize() {
+		return size;
+	}
+
+	public void setSize(long size) {
+		this.size = size;
 	}
 
 }

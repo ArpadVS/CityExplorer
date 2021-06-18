@@ -27,6 +27,7 @@ import { PopularityComponent } from './reports/popularity/popularity.component';
 import { AlarmsComponent } from './reports/alarms/alarms.component';
 import { ActivityNewComponent } from './activities/activity-new/activity-new.component';
 import { SearchRatingRangeComponent } from './reports/search-rating-range/search-rating-range.component';
+import { AllUsersComponent } from './reports/all-users/all-users.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { SearchRatingRangeComponent } from './reports/search-rating-range/search
     PopularityComponent,
     AlarmsComponent,
     ActivityNewComponent,
-    SearchRatingRangeComponent
+    SearchRatingRangeComponent,
+    AllUsersComponent
   ],
   imports: [
     BrowserModule,

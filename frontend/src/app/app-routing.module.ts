@@ -8,7 +8,8 @@ import { RoleGuard } from './core/guards/role.guard';
 import { RecommendationComponent } from './recommendation/recommendation.component';
 import { ActivityDetailedComponent } from './activities/activity-detailed/activity-detailed.component'
 import { ReportsPageComponent } from './reports/reports-page/reports-page.component';
-import { ActivityNewComponent } from "./activities/activity-new/activity-new.component"
+import { ActivityNewComponent } from "./activities/activity-new/activity-new.component";
+import { AllUsersComponent } from './reports/all-users/all-users.component';
  
 
 const routes: Routes = [
@@ -31,6 +32,12 @@ const routes: Routes = [
   {
     path: 'reports',
     component: ReportsPageComponent,
+    canActivate: [RoleGuard],
+    data: {expectedRoles: 'ROLE_ADMIN'}
+  },  
+  {
+    path: 'users',
+    component: AllUsersComponent,
     canActivate: [RoleGuard],
     data: {expectedRoles: 'ROLE_ADMIN'}
   },

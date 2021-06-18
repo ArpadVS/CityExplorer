@@ -4,4 +4,6 @@ export class Registration {
     email: string;
     firstName: string;
     lastName: string;
+    active: boolean;
+    size:number;
 }

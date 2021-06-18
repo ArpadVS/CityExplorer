@@ -1,0 +1,38 @@
+<div style="margin-top: 5%;" >
+    <div style="margin: auto; text-align: center;">
+        <mat-form-field class="search-wrapper">
+            <mat-label>Filter Table</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. username" #input>
+          </mat-form-field>
+        <table mat-table [dataSource]="users" class="mat-elevation-z8 search-wrapper">
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.firstName}} {{element.lastName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="username">
+                <th mat-header-cell *matHeaderCellDef> Username </th>
+                <td mat-cell *matCellDef="let element"> {{element.username}} </td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef> Status </th>
+                <td mat-cell *matCellDef="let element" >  
+                    <span *ngIf="element.active"><b>Active</b></span>
+                    <span *ngIf="!element.active"><b style="color: red;">Inactive</b></span>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="block">
+                <th mat-header-cell *matHeaderCellDef> </th>
+                <td mat-cell *matCellDef="let element"> 
+                    <span *ngIf="element.active"><button mat-raised-button color="warn" (click)="deactivateUser(element.username)">Block</button> </span>
+                    <span *ngIf="!element.active"><button mat-raised-button color="primary" (click)="activateUser(element.username)">Activate</button> </span>
+                </td>
+            </ng-container>
+    
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator class="paginator" [pageSize]="10"
+        [pageSizeOptions]="[5, 10, 25, 100]" >
+        </mat-paginator>
+    </div>
+</div>
