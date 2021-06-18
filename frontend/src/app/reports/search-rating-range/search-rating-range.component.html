@@ -1,0 +1,46 @@
+<div class="form-wrapper">
+
+    <!--Range-->
+    <div class="center-div">
+        <div >
+            <span class="text">Enter the range of ratings! <br> From:
+                <input matInput
+                pattern="/^[0-5].[0-9]+$" [ngModelOptions]="{standalone: true}" [(ngModel)] = "minRating" style="margin: auto;" />
+          to:
+          <input 
+                matInput
+                pattern="/^[0-5].[0-9]+$" [ngModelOptions]="{standalone: true}" [(ngModel)] = "maxRating" style="margin: auto;"/>
+            </span>
+            <button (click) = "getActivities()"  class="btn btn-success" style="margin-left: 10px;" >Search</button>
+      </div>
+    </div>
+
+    <!--Results-->
+    <div class="float-container">
+        <div *ngIf="this.activities && this.activities.length == 0" style="width: 100%; text-align: center;">
+          <b style="font-size: 2.5em;">No activities to show!</b>
+        </div>
+        <div class="float-child card" *ngFor="let activity of activities" (click)="getDetails(activity.id)"  (click)="getDetails(activity.id)" >
+          <img class="card-img-top" src={{activity.imageUrl}} width="220" height="220" alt="Card image cap">
+          <div class="card-body">
+    
+            <p class="card-text">
+              <strong>{{ activity.name}}</strong>
+            </p>
+            <p class="card-text">
+                Average rating: {{activity.averageRating| number : '1.2-2'}} <br>
+                <ng-template #t let-fill="fill">
+                    <span class="star" [class.full]="fill === 100">
+                        <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+                    </span>
+                </ng-template>
+                <ngb-rating style="height: 22px;" [rate]="activity.averageRating" [starTemplate]="t" [readonly]="true" [max]="5"></ngb-rating>
+            </p>
+            <br>
+            <mat-divider></mat-divider>
+            <p class="description">{{activity.description}}</p>
+    
+          </div>
+        </div>
+      </div>
+</div>
