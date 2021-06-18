@@ -1,1 +1,16 @@
-<p>popularity works!</p>
+<div class="wrapper">
+    <div class="center-div">
+        <div *ngIf="mostRecommended && leastRecommended" style="margin: auto; width: 70%;">
+
+            <div class="report-text">Most recommended activity:
+            </div><br>
+            <app-activity-simple [activity]=mostRecommended></app-activity-simple>
+            <br><br>
+
+            <div class="report-text">Least recommended activity:
+            </div><br>
+            <app-activity-simple [activity]=leastRecommended></app-activity-simple>
+
+        </div>
+    </div>
+</div>

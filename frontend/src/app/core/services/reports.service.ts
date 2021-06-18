@@ -24,8 +24,8 @@ export class ReportService {
     return this.http.post<Activity[]>(this.path + '/getByRatingRange', dto, { headers: this.headers });
   }
 
-  getPopularityReport(numOfMonths: number): Observable<PopularityDto> {
-    return this.http.get<PopularityDto>(this.path + '/popularityReport/' + numOfMonths, { headers: this.headers });
+  getPopularityReport(): Observable<PopularityDto> {
+    return this.http.get<PopularityDto>(this.path + '/popularityReport/', { headers: this.headers });
   }
 
   getDissatisfiedUsers(): Observable<UserSatisfaction[]> {

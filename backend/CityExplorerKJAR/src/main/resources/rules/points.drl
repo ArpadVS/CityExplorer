@@ -27,7 +27,7 @@ rule "The Best Restaurant"
     then	
     	best = $activity;
     	drools.getKnowledgeRuntime().setGlobal("best", $activity);
-    	System.out.println("Activity: " + $name + " Matching: " + $score + " ===> ");  
+    	System.out.println("===== Activity: " + $name + "is the best with score: " + $score + " ===== ");  
 	    insert( new FoundBest() );
 end;
 
