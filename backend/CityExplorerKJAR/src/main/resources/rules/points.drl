@@ -6,6 +6,7 @@ import com.sbnz.CityExplorer.model.Features;
 import com.sbnz.CityExplorer.util.ScoreCalculator;
 import com.sbnz.CityExplorer.dto.UserRequirementsDTO;
 import com.sbnz.CityExplorer.dto.ActivityDTO;
+import com.sbnz.CityExplorer.util.FinishedProcessingRequirements;
 import java.lang.Integer;
 import java.util.*;
 
@@ -15,52 +16,19 @@ global ScoreCalculator calc;
 declare FoundBest
 end;
 
-rule "Calculate score for each activity based on requirements"
+rule "The Best Restaurant" 
 	agenda-group "recommend"
-	salience 60
-	lock-on-active 
+	salience(  calc.calculateScore($activity,$req) )
     when
 		$req: ActivityRequirements();
 		$activity: Activity($name: name, $score: score);
+		FinishedProcessingRequirements();
+		not FoundBest()
     then	
-		int score = calc.calculateScore($activity,$req);
-		$activity.setScore(score);
-    	System.out.println("Activity " + $name + ", Score: " + score  ); 
-    	if($req.getBestScore() < score){
-    		$req.setBestScore(score);
-    		System.out.println($req.getBestScore());
-    	}
-end;
-
-
-rule "IPrint activities"
-	agenda-group "recommend"
-	salience 58
-	lock-on-active 
-	when
-		$a : Activity()
-	then
-    	System.out.println($a.toString());
-	
-end
-
-
-rule "The Best Activity score"
-	agenda-group "recommend"
-	salience 55
-	lock-on-active 
-    when
-    	$req : ActivityRequirements()
-		$a : Activity()
-		not(FoundBest())
-    then	
-		if($req.getBestScore() == $a.getScore()){
-	    	System.out.println("=========================" );  	
-	    	System.out.println("Biggest score is " + $a.getScore() + " for " + $a.getId());  
-	    	System.out.println("from req is " + $req.getBestScore() + "from activity is " + $a.getScore());  	
-    		drools.getKnowledgeRuntime().setGlobal("best", $a);
-    		insert(new FoundBest());
-    	}
+    	best = $activity;
+    	drools.getKnowledgeRuntime().setGlobal("best", $activity);
+    	System.out.println("Activity: " + $name + " Matching: " + $score + " ===> ");  
+	    insert( new FoundBest() );
 end;
 
 rule "Reset score for activities to 0"
@@ -74,176 +42,3 @@ rule "Reset score for activities to 0"
     	modify($a){setScore(0)};
         System.out.println( "Score reset to " + $a.getScore() + " for " + $a.getName());
 end;
-
-/*
-rule "Started scoring"
-    agenda-group "recommend"
-    salience 75
-    when
-		ActivityRequirements()
-    then
-        System.out.println( "Started scoring points!" );
-        best.setName("changed");
-end;
-
-rule "Reset score for activities to 0"
-    agenda-group "recommend"
-    salience 74
-    lock-on-active 
-    when
-		$a : Activity()
-    then
-    	modify($a){setScore(0)};
-        System.out.println( "Score reset to " + $a.getScore() + " for " + $a.getName());
-        best.setName("changed");
-end;
-
-rule "4 points for matching the price"
-    agenda-group "recommend"
-    salience 60
-    lock-on-active 
-    when
-		$a : Activity($p : features.price, $score : score);
-		ActivityRequirements(prices contains $p);
-    	//not( ActivityProcessed ( activity == $a, ruleName == "Price"))
-    then
-    	modify($a){setScore($score + 4)};
-        System.out.println( "4 points for " + $a.getName() + " - PRICE");
-        //System.out.println( $p2.toString());
-        System.out.println( $p.toString());
-end;
-
-rule "1 point for parking"
-	salience 60
-	agenda-group "recommend"
-	when
-		$a : Activity(features.parking == true);
-		ActivityRequirements(features.parking == true);
-	then
-		modify($a){setScore($a.getScore() + 1);};
-		System.out.println("1 point for " + $a.getName() + " -PARKING");	
-end;
-
-
-rule "1 point for bus"
-	salience 60
-	agenda-group "recommend"
-	when
-		$a : Activity(features.busNearby == true);
-		ActivityRequirements(features.busNearby == true);
-	then
-		modify($a){setScore($a.getScore() + 1);};
-		System.out.println("1 point for " + $a.getName() + " -BUSNEARBY");	
-end;
-
-rule "1 point for reservations"
-	salience 60
-	agenda-group "recommend"
-	when
-		$a : Activity(features.reservations == true);
-		ActivityRequirements(features.reservations == true);
-	then
-		modify($a){setScore($a.getScore() + 1);};
-		System.out.println("1 point for " + $a.getName() + " -RESERVATION");	
-end;
-
-rule "1 point for wifi"
-	salience 60
-	agenda-group "recommend"
-	when
-		$a : Activity(features.wifi == true);
-		ActivityRequirements(features.wifi == true);
-	then
-		modify($a){setScore($a.getScore() + 1);};
-		System.out.println("1 point for " + $a.getName() + " -WIFI");	
-end;
-
-rule "1 point for tv"
-	salience 60
-	agenda-group "recommend"
-	when
-		$a : Activity(features.tv == true);
-		ActivityRequirements(features.tv == true);
-	then
-		modify($a){setScore($a.getScore() + 1);};
-		System.out.println("1 point for " + $a.getName() + " -TV");	
-end;
-
-rule "1 point for program for childrens"
-	salience 60
-	agenda-group "recommend"
-	when
-		$a : Activity(features.childrensProgram == true);
-		ActivityRequirements(features.childrensProgram == true);
-	then
-		modify($a){setScore($a.getScore() + 1);};
-		System.out.println("1 point for " + $a.getName() + " -CHILD.PROG.");	
-end;
-
-rule "2 point for activities outdoor in nice weather"
-	salience 60
-	agenda-group "recommend"
-	when
-		$a : Activity(features.outdoor == true);
-		ActivityRequirements(features.outdoor == true);
-	then
-		modify($a){setScore($a.getScore() + 2);};
-		System.out.println("2 points for " + $a.getName() + " -OUTDOOR");	
-end;
-
-
-rule "2 point for activities in the center when BY_FOOT"
-	salience 60
-	agenda-group "recommend"
-	when
-		$a : Activity(location == Location.CITY_CENTER);
-		ActivityRequirements(location == Location.CITY_CENTER);
-	then
-		modify($a){setScore($a.getScore() + 2);};
-		System.out.println("2 points for " + $a.getName() + " -CENTERBYFOOT");	
-end;
-
-rule "-1 point for activities in the Suburbs when BY_FOOT"
-	salience 60
-	agenda-group "recommend"
-	when
-		$a : Activity(location == Location.SUBURBS);
-		ActivityRequirements(location == Location.CITY_CENTER);
-	then
-		modify($a){setScore($a.getScore() - 1);};
-		System.out.println("-1 point for " + $a.getName() + " -SUBURBSBYFOOT");	
-end;
-
-rule "-3 point for activities outside the city when BY_FOOT"
-	salience 60
-	agenda-group "recommend"
-	when
-		$a : Activity(location == Location.OUTSIDE_THE_CITY);
-		ActivityRequirements(location == Location.CITY_CENTER);
-	then
-		modify($a){setScore($a.getScore() - 3);};
-		System.out.println("-3 points for " + $a.getName() + " -OUTSIDEBYFOOT");	
-end;
-
-
-rule "1 point for matching space for activities with more people"
-	salience 60
-	agenda-group "recommend"
-	when
-		$a : Activity($f: features.space);
-		ActivityRequirements(features.space == $f);
-	then
-		modify($a){setScore($a.getScore() + 1);};
-		System.out.println("1 points for " + $a.getName() + " -SPACE");	
-end;
-
-rule "-5 points when activity already recommended to user"
-	salience 60
-	agenda-group "recommend"
-	when
-		$a : Activity($id1 : id);
-		Activity( id ==  $id1) from previousRecommendations
-	then
-		modify($a){setScore($a.getScore() - 5);};
-		System.out.println("-5 points for " + $a.getName() + " -ALREADY_RECCOMENDED");	
-end;*/

@@ -2,6 +2,7 @@ package com.rules;
 import com.sbnz.CityExplorer.model.*;
 import com.sbnz.CityExplorer.dto.UserRequirementsDTO;
 import com.sbnz.CityExplorer.dto.ActivityDTO;
+import com.sbnz.CityExplorer.util.FinishedProcessingRequirements;
 import java.util.List;
 
 global Activity best;
@@ -261,4 +262,5 @@ rule "End"
     then
         System.out.println( "Ended reqirements!" );
         System.out.println($a );
+        insert (new FinishedProcessingRequirements());
 end;
