@@ -1,1 +1,56 @@
-<p>user-satisfaction works!</p>
+<div style="margin-top: 5%;">
+    <div   style="margin: auto; width: 60%;">
+        
+        <div *ngIf="!dissatisfiedUsers && !satisfiedUsers" class="report-text">No user who in the last three month had 6 recommendations and at least 3 ratings.
+        </div><br>
+            
+        <div *ngIf="satisfiedUsers" class="report-text">Satisfied users (3 or more good ratings in last 3 months): 
+        </div><br>
+
+        <mat-expansion-panel class="box" *ngFor = "let satis of satisfiedUsers; let i = index">
+
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{i + 1}}. {{satis.user.firstName}} {{satis.user.lastName}}
+              </mat-panel-title>
+              <mat-panel-description>
+                Activities which were rated highly
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+        
+            <div  *ngFor = "let activity of satis.activities; let j = index">
+                <div class="row">
+                    <div class="col">{{activity.name}} </div>
+                    <div class="col-2"><button type="button" class="btn btn-outline-secondary btn-sm" (click) = "goToDetails(activity.id)">Details</button> </div>
+                </div>
+                <mat-divider></mat-divider>
+            </div>
+        
+          </mat-expansion-panel>
+            
+        <div *ngIf="dissatisfiedUsers" class="report-text">Dissatisfied users(3 or more bad ratings last 3 months): 
+        </div><br>
+
+        <mat-expansion-panel class="box" *ngFor = "let satis of dissatisfiedUsers; let i = index">
+
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{i + 1}}. {{satis.user.firstName}} {{satis.user.lastName}}
+              </mat-panel-title>
+              <mat-panel-description>
+                Activities which were badly rated
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+        
+            <div  *ngFor = "let activity of satis.activities; let j = index">
+                <div class="row">
+                    <div class="col">{{activity.name}} </div>
+                    <div class="col-2"><button type="button" class="btn btn-outline-secondary btn-sm" (click) = "goToDetails(activity.id)">Details</button> </div>
+                </div>
+                <mat-divider></mat-divider>
+            </div>
+        
+          </mat-expansion-panel>
+
+    </div>
+</div>

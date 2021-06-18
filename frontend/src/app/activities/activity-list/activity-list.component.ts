@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class ActivityListComponent implements OnInit {
   private activities: Activity[];
   private searchInput: string = '';
+  private pushed: boolean = false;
 
   constructor(
     private activityService: ActivityService,
@@ -43,9 +44,15 @@ export class ActivityListComponent implements OnInit {
     this.router.navigate([link]);
   }
 
+  reset(){
+    this.searchInput = "";
+    this.pushed = false;
+    this.search();
+  }
+
   search() {
     const searchTerm : any = {'name' : this.searchInput}
-
+    this.pushed = true;
     this.activityService.search(searchTerm).subscribe(
       (response => {
         if (response != null) {   

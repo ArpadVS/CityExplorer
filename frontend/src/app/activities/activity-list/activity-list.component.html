@@ -7,6 +7,10 @@
       <span class="input-group-text blue lighten-3" id="basic-text1" ><i class="fa fa-search text-white" aria-hidden="true">
           <mat-icon style="display: flex; ">search</mat-icon></i></span>
     </div>
+    <div *ngIf="searchInput != '' && pushed" class="input-group-append" style="cursor: pointer;"  (click) = "reset()">
+      <span class="input-group-text blue lighten-3" id="basic-text1" ><i class="fa fa-search text-white" aria-hidden="true">
+          <mat-icon style="display: flex; ">restore</mat-icon></i></span>
+    </div>
   </div>
 
   <!-- Activities-->

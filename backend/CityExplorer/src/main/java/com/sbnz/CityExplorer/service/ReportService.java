@@ -52,7 +52,7 @@ public class ReportService {
 	public PopularityDTO getPopularityReport() {
 
 		// inserting facts
-		KieSession kSession = droolsService.getRulesSession();
+		KieSession kSession = droolsService.getKieContainer().newKieSession("rulesSession");
 		List<User> users = userRepository.findAll();
 		for (User user : users) {
 			if (user instanceof RegisteredUser) {
@@ -73,6 +73,8 @@ public class ReportService {
 		// result
 		mostRecommendedActivity = (Activity) kSession.getGlobal("mostRecommendedActivity");
 		leastRecommendedActivity = (Activity) kSession.getGlobal("leastRecommendedActivity");
+		
+		kSession.destroy();
 		PopularityDTO popularityDto = new PopularityDTO(ActivityDTOConverter.convertToDTO(mostRecommendedActivity),
 				ActivityDTOConverter.convertToDTO(leastRecommendedActivity));
 		return popularityDto;
@@ -80,7 +82,7 @@ public class ReportService {
 
 	public Set<DissatisfiedUsersDTO> getDissatisfiedUsers() {
 		// inserting facts
-		KieSession kSession = droolsService.getRulesSession();
+		KieSession kSession = droolsService.getKieContainer().newKieSession("rulesSession");
 		List<User> users = userRepository.findAll();
 		for (User user : users) {
 			if (user instanceof RegisteredUser) {
@@ -107,12 +109,13 @@ public class ReportService {
 			}
 			dissatisfiedUsersList.add(dto);
 		}
+		kSession.destroy();
 		return dissatisfiedUsersList;
 	}
 
 	public Set<DissatisfiedUsersDTO> getSatisfiedUsers() {
 		// inserting facts
-		KieSession kSession = droolsService.getRulesSession();
+		KieSession kSession = droolsService.getKieContainer().newKieSession("rulesSession");
 		List<User> users = userRepository.findAll();
 		for (User user : users) {
 			if (user instanceof RegisteredUser) {
@@ -139,6 +142,7 @@ public class ReportService {
 			}
 			satisfiedUsersList.add(dto);
 		}
+		kSession.destroy();
 		return satisfiedUsersList;
 	}
 
