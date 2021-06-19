@@ -12,11 +12,9 @@ import java.util.concurrent.TimeUnit;
 import org.drools.core.time.SessionPseudoClock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kie.api.KieServices;
-import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -24,6 +22,7 @@ import com.sbnz.CityExplorer.events.BadCredentialsEvent;
 import com.sbnz.CityExplorer.model.Activity;
 import com.sbnz.CityExplorer.model.RegisteredUser;
 import com.sbnz.CityExplorer.repository.UserRepository;
+import com.sbnz.CityExplorer.service.DroolsService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -32,13 +31,12 @@ public class LoginEventRulesUnitTest {
 	@MockBean
 	UserRepository userRepositoryMocked;
 
+	@Autowired
+	DroolsService droolsService;
+	
 	@Test
 	public void testLoginEvents() {
-
-		KieServices kservice = KieServices.Factory.get();
-		KieContainer kContainer = kservice
-				.newKieContainer(kservice.newReleaseId("com.sbnz", "CityExplorerKJAR", "1.0.0-SNAPSHOT"));
-		KieSession kSession = kContainer.newKieSession("eventsSession");
+		KieSession kSession = droolsService.getEventsSession();
 		kSession.getAgenda().getAgendaGroup("login");
 		SessionPseudoClock clock = kSession.getSessionClock();
 
