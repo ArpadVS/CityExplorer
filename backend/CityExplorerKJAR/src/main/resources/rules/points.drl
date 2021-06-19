@@ -16,7 +16,7 @@ global ScoreCalculator calc;
 declare FoundBest
 end;
 
-rule "The Best Restaurant" 
+rule "Best activity" 
 	agenda-group "recommend"
 	salience(  calc.calculateScore($activity,$req) )
     when

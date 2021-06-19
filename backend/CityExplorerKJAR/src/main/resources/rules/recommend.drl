@@ -15,7 +15,6 @@ rule "Start"
     	ActivityRequirements()
     then
         System.out.println( "Started recommendation!" );
-        //best.setName("changed");
 end;
 
 rule "Going with family"

@@ -13,15 +13,6 @@ end;
 
 global UserRepository userRepository;
 
-/*
-rule "Test"
-	agenda-group "login"
-	when
-		$e: BadCredentialsEvent()
-	then
-		System.out.println("Failed login detected!");
-end;*/
-
 
 rule "User tries to login with bad password 10 times in 3 minutes - warning"
     agenda-group "login"

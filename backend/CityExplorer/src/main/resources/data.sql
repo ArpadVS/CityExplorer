@@ -11,8 +11,8 @@ INSERT INTO registered_user (id, username, password, first_name, last_name, emai
 ( 102, 'user3', '$2a$10$NBqWWykrf7S2o2V2ja5E7OaDCbjAqcghBIk9dOl1Bj3UIsooKJMkK','Test', 'Testic', 'tester597@gmail.com','ROLE_REGISTERED_USER',  true, '2021-05-08 10:00:00.00'),
 ( 103, 'user4', '$2a$10$NBqWWykrf7S2o2V2ja5E7OaDCbjAqcghBIk9dOl1Bj3UIsooKJMkK','Test2', 'Testeric', 'vodavoda@gmail.com','ROLE_REGISTERED_USER',  true, '2021-05-08 10:00:00.00'),
 ( 104, 'user5', '$2a$10$NBqWWykrf7S2o2V2ja5E7OaDCbjAqcghBIk9dOl1Bj3UIsooKJMkK','Asdf', 'Gaziranavoda', 'minaqua@gmail.com','ROLE_REGISTERED_USER',  true, '2021-05-08 10:00:00.00'),
-( 105, 'user6', '$2a$10$NBqWWykrf7S2o2V2ja5E7OaDCbjAqcghBIk9dOl1Bj3UIsooKJMkK','Satisfied', 'User', 'satiUser95@gmail.com','ROLE_REGISTERED_USER',  true, '2021-05-08 10:00:00.00'),
-( 106, 'user7', '$2a$10$NBqWWykrf7S2o2V2ja5E7OaDCbjAqcghBIk9dOl1Bj3UIsooKJMkK','Dissatisfied', 'User', 'disSatiUser@gmail.com','ROLE_REGISTERED_USER',  true, '2021-05-08 10:00:00.00');
+( 105, 'user6', '$2a$10$NBqWWykrf7S2o2V2ja5E7OaDCbjAqcghBIk9dOl1Bj3UIsooKJMkK','Pera', 'Peric', 'satiUser95@gmail.com','ROLE_REGISTERED_USER',  true, '2021-05-08 10:00:00.00'),
+( 106, 'user7', '$2a$10$NBqWWykrf7S2o2V2ja5E7OaDCbjAqcghBIk9dOl1Bj3UIsooKJMkK','Mika', 'Mikic', 'disSatiUser@gmail.com','ROLE_REGISTERED_USER',  true, '2021-05-08 10:00:00.00');
 
 INSERT INTO features (id, bus_nearby, childrens_program, outdoor, parking, price, reservations, space, tv, wifi) VALUES
 (100, true, true,  true,  true, 'CHEAP', false , 'LARGE', false, false),
