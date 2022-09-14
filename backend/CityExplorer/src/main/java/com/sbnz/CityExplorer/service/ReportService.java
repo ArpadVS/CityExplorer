@@ -86,10 +86,10 @@ public class ReportService {
 		List<User> users = userRepository.findAll();
 		for (User user : users) {
 			if (user instanceof RegisteredUser) {
-				RegisteredUser reg = (RegisteredUser) user;
-				System.out.println("\tInserted: " + user.getUsername() + " with " + reg.getRecommendedActivities().size()
+				RegisteredUser registeredUser = (RegisteredUser) user;
+				System.out.println("\tInserted: " + user.getUsername() + " with " + registeredUser.getRecommendedActivities().size()
 						+ " recommended.");
-				kSession.insert(reg);
+				kSession.insert(registeredUser);
 			}
 		}
 		
@@ -101,11 +101,11 @@ public class ReportService {
 
 		// result
 		Set<DissatisfiedUsersDTO> dissatisfiedUsersList = new HashSet<DissatisfiedUsersDTO>();
-		for (UserActivitiesDTO item : dissatisfiedUsers) {
+		for (UserActivitiesDTO userInfo : dissatisfiedUsers) {
 			DissatisfiedUsersDTO dto = new DissatisfiedUsersDTO();
-			dto.setUser(RegistrationDTOConverter.convertToDTO(item.getUser()));
-			for (Activity r : item.getActivities()) {
-				dto.getActivities().add(ActivityDTOConverter.convertToDTO(r));
+			dto.setUser(RegistrationDTOConverter.convertToDTO(userInfo.getUser()));
+			for (Activity userActivity : userInfo.getActivities()) {
+				dto.getActivities().add(ActivityDTOConverter.convertToDTO(userActivity));
 			}
 			dissatisfiedUsersList.add(dto);
 		}
@@ -119,10 +119,10 @@ public class ReportService {
 		List<User> users = userRepository.findAll();
 		for (User user : users) {
 			if (user instanceof RegisteredUser) {
-				RegisteredUser reg = (RegisteredUser) user;
-				System.out.println("\t\tInserted: " + user.getUsername() + " with " + reg.getRecommendedActivities().size()
+				RegisteredUser registeredUser = (RegisteredUser) user;
+				System.out.println("\t\tInserted: " + user.getUsername() + " with " + registeredUser.getRecommendedActivities().size()
 						+ " recommended.");
-				kSession.insert(reg);
+				kSession.insert(registeredUser);
 			}
 		}
 		
@@ -134,11 +134,11 @@ public class ReportService {
 
 		// result
 		Set<DissatisfiedUsersDTO> satisfiedUsersList = new HashSet<DissatisfiedUsersDTO>();
-		for (UserActivitiesDTO item : satisfiedUsers) {
+		for (UserActivitiesDTO userInfo : satisfiedUsers) {
 			DissatisfiedUsersDTO dto = new DissatisfiedUsersDTO();
-			dto.setUser(RegistrationDTOConverter.convertToDTO(item.getUser()));
-			for (Activity r : item.getActivities()) {
-				dto.getActivities().add(ActivityDTOConverter.convertToDTO(r));
+			dto.setUser(RegistrationDTOConverter.convertToDTO(userInfo.getUser()));
+			for (Activity userActivity : userInfo.getActivities()) {
+				dto.getActivities().add(ActivityDTOConverter.convertToDTO(userActivity));
 			}
 			satisfiedUsersList.add(dto);
 		}
@@ -164,8 +164,8 @@ public class ReportService {
 		}
 		kieSession.setGlobal("result", result);
 		kieSession.fireAllRules();
-		return (result.stream().map(acti -> {
-			ActivityDTO activityDTO = ActivityDTOConverter.convertToDTO(acti);
+		return (result.stream().map(activity -> {
+			ActivityDTO activityDTO = ActivityDTOConverter.convertToDTO(activity);
 			return activityDTO;
 		})).collect(Collectors.toList());
 	}

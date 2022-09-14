@@ -39,7 +39,7 @@ public class ActivityService {
 	@Autowired
 	ActivityRepository activityRepository;
 	@Autowired
-	ScoreCalculator sc;
+	ScoreCalculator scoreCalculator;
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
@@ -56,10 +56,10 @@ public class ActivityService {
 	}
 	
 	public boolean saveActivity(ActivityDTO dto) {
-		Activity a = ActivityDTOConverter.convertFromDTO(dto);
-		System.out.println(a.toString() + "created");
+		Activity activity = ActivityDTOConverter.convertFromDTO(dto);
+		System.out.println(activity.toString() + "created");
 		try {
-			activityRepository.save(a);
+			activityRepository.save(activity);
 			return true;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -77,27 +77,27 @@ public class ActivityService {
 		QueryResults results = kieSession.getQueryResults("User ratings by activity", id);
 
 		// getting values from query
-		for (QueryResultsRow qrr : results) {
-			Activity activity = (Activity) qrr.get("$activity");
+		for (QueryResultsRow queryResult : results) {
+			Activity activity = (Activity) queryResult.get("$activity");
 			// total number of ratings
-			int ratingNum = ((Number) qrr.get("$ratingNum")).intValue();
+			int ratingNum = ((Number) queryResult.get("$ratingNum")).intValue();
 			// sum of every rating
-			int ratingSum = (int) qrr.get("$ratingSum");
+			int ratingSum = (int) queryResult.get("$ratingSum");
 
 			// total number of 1-2-3-4-5 ratings
-			int ones = ((Number) qrr.get("$ones")).intValue();
-			int twos = ((Number) qrr.get("$twos")).intValue();
-			int threes = ((Number) qrr.get("$threes")).intValue();
-			int fours = ((Number) qrr.get("$fours")).intValue();
-			int fives = ((Number) qrr.get("$fives")).intValue();
+			int ones = ((Number) queryResult.get("$ones")).intValue();
+			int twos = ((Number) queryResult.get("$twos")).intValue();
+			int threes = ((Number) queryResult.get("$threes")).intValue();
+			int fours = ((Number) queryResult.get("$fours")).intValue();
+			int fives = ((Number) queryResult.get("$fives")).intValue();
 
 			// checking if current user already gave a rating
 			int userReview = 0;
 			RegisteredUser loggedUser = getCurrentUser();
 			if (loggedUser != null) {
-				for (Rating r : activity.getRatings()) {
-					if (r.getRegisteredUser().getId() == loggedUser.getId()) {
-						userReview = r.getRating();
+				for (Rating rating : activity.getRatings()) {
+					if (rating.getRegisteredUser().getId() == loggedUser.getId()) {
+						userReview = rating.getRating();
 						break;
 					}
 				}
@@ -163,26 +163,26 @@ public class ActivityService {
 		List<Activity> activities = activityRepository.findAll();
 
 		// getting agenda for processing user info
-		KieSession ks = droolsService.getKieContainer().newKieSession("rulesSession");
-		ks.getAgenda().getAgendaGroup("recommend").setFocus();
-		ks.setGlobal("best", bestScored);
-		ks.setGlobal("calc", sc);
-		ks.insert(dto);
-		ks.insert(requirements);
+		KieSession kieSession = droolsService.getKieContainer().newKieSession("rulesSession");
+		kieSession.getAgenda().getAgendaGroup("recommend").setFocus();
+		kieSession.setGlobal("best", bestScored);
+		kieSession.setGlobal("calc", scoreCalculator);
+		kieSession.insert(dto);
+		kieSession.insert(requirements);
 		//ks.insert(sc);
 		for (Activity a : activities) {
-			ks.insert(a);
+			kieSession.insert(a);
 		}
-		ks.fireAllRules();
+		kieSession.fireAllRules();
 
-		bestScored = (Activity) ks.getGlobal("best");
+		bestScored = (Activity) kieSession.getGlobal("best");
 		ActivityDTO retVal = ActivityDTOConverter.convertToDTO(bestScored);
 		RegisteredUser u = getCurrentUser();
 		if (!u.getRecommendedActivities().contains(bestScored)) {
 			u.getRecommendedActivities().add(bestScored);
 			userRepository.save(u);
 		}
-		ks.destroy();
+		kieSession.destroy();
 		this.droolsService.releaseRulesSession();
 		return retVal;
 	}
@@ -196,8 +196,8 @@ public class ActivityService {
 		Rating newRating = null;
 
 		// check if already recommended
-		for (Activity a : logged.getRecommendedActivities()) {
-			if (a.getId() == dto.getActivityId()) {
+		for (Activity recommendedActivity : logged.getRecommendedActivities()) {
+			if (recommendedActivity.getId() == dto.getActivityId()) {
 				alreadyRecommended = true;
 
 				// checking if user already rated activity
@@ -223,15 +223,15 @@ public class ActivityService {
 			activity.getRatings().add(newRating);
 			RatingEvent ratingEvent = new RatingEvent(new Date(), newRating, logged.getId());
 
-			KieSession ks = droolsService.getEventsSession();
-			ks.insert(ratingEvent);
+			KieSession kieSession = droolsService.getEventsSession();
+			kieSession.insert(ratingEvent);
 
-			ks.getAgenda().getAgendaGroup("rating").setFocus();
-			ks.fireAllRules();
+			kieSession.getAgenda().getAgendaGroup("rating").setFocus();
+			kieSession.fireAllRules();
 			activityRepository.save(activity);
 
 		} else {
-			System.out.println("Cant rate activity which was not recommended before");
+			System.out.println("Can't rate activity which was not recommended before");
 		}
 		return alreadyRecommended;
 	}

@@ -70,9 +70,9 @@ public class AuthenticationService {
 			System.out.println("Email already exists.");
 			return null;
 		}
-		RegisteredUser u = RegistrationDTOConverter.convertFromDTO(dto);
-		userRepository.save(u);
-		return u;
+		RegisteredUser user = RegistrationDTOConverter.convertFromDTO(dto);
+		userRepository.save(user);
+		return user;
 	}
 
 	private User getCurrentUser() {
