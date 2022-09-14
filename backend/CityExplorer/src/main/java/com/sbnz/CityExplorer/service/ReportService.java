@@ -100,17 +100,17 @@ public class ReportService {
 		kSession.fireAllRules();
 
 		// result
-		Set<UserSatisfactionDTO> dissatisfiedUsersList = new HashSet<UserSatisfactionDTO>();
+		Set<UserSatisfactionDTO> dissatisfiedUsersResult = new HashSet<UserSatisfactionDTO>();
 		for (UserActivitiesDTO userInfo : dissatisfiedUsers) {
 			UserSatisfactionDTO dto = new UserSatisfactionDTO();
 			dto.setUser(RegistrationDTOConverter.convertToDTO(userInfo.getUser()));
 			for (Activity userActivity : userInfo.getActivities()) {
 				dto.getActivities().add(ActivityDTOConverter.convertToDTO(userActivity));
 			}
-			dissatisfiedUsersList.add(dto);
+			dissatisfiedUsersResult.add(dto);
 		}
 		kSession.destroy();
-		return dissatisfiedUsersList;
+		return dissatisfiedUsersResult;
 	}
 
 	public Set<UserSatisfactionDTO> getSatisfiedUsers() {
@@ -133,17 +133,17 @@ public class ReportService {
 		kSession.fireAllRules();
 
 		// result
-		Set<UserSatisfactionDTO> satisfiedUsersList = new HashSet<UserSatisfactionDTO>();
+		Set<UserSatisfactionDTO> satisfiedUsersResult = new HashSet<UserSatisfactionDTO>();
 		for (UserActivitiesDTO userInfo : satisfiedUsers) {
 			UserSatisfactionDTO dto = new UserSatisfactionDTO();
 			dto.setUser(RegistrationDTOConverter.convertToDTO(userInfo.getUser()));
 			for (Activity userActivity : userInfo.getActivities()) {
 				dto.getActivities().add(ActivityDTOConverter.convertToDTO(userActivity));
 			}
-			satisfiedUsersList.add(dto);
+			satisfiedUsersResult.add(dto);
 		}
 		kSession.destroy();
-		return satisfiedUsersList;
+		return satisfiedUsersResult;
 	}
 
 	public List<ActivityDTO> getActivitiesByRatingRange(RatingRangeDTO dto) {
