@@ -3,12 +3,12 @@ package com.sbnz.CityExplorer.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DissatisfiedUsersDTO {
+public class UserSatisfactionDTO {
 
 	private RegistrationDTO user;
 	private List<ActivityDTO> activities;
 
-	public DissatisfiedUsersDTO() {
+	public UserSatisfactionDTO() {
 		this.activities = new ArrayList<ActivityDTO>();
 	}
 

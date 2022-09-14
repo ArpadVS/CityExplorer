@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import com.sbnz.CityExplorer.converter.ActivityDTOConverter;
 import com.sbnz.CityExplorer.converter.RegistrationDTOConverter;
 import com.sbnz.CityExplorer.dto.ActivityDTO;
-import com.sbnz.CityExplorer.dto.DissatisfiedUsersDTO;
+import com.sbnz.CityExplorer.dto.UserSatisfactionDTO;
 import com.sbnz.CityExplorer.dto.PopularityDTO;
 import com.sbnz.CityExplorer.dto.RatingRangeDTO;
 import com.sbnz.CityExplorer.dto.ReportDTO;
@@ -80,7 +80,7 @@ public class ReportService {
 		return popularityDto;
 	}
 
-	public Set<DissatisfiedUsersDTO> getDissatisfiedUsers() {
+	public Set<UserSatisfactionDTO> getDissatisfiedUsers() {
 		// inserting facts
 		KieSession kSession = droolsService.getKieContainer().newKieSession("rulesSession");
 		List<User> users = userRepository.findAll();
@@ -100,9 +100,9 @@ public class ReportService {
 		kSession.fireAllRules();
 
 		// result
-		Set<DissatisfiedUsersDTO> dissatisfiedUsersList = new HashSet<DissatisfiedUsersDTO>();
+		Set<UserSatisfactionDTO> dissatisfiedUsersList = new HashSet<UserSatisfactionDTO>();
 		for (UserActivitiesDTO userInfo : dissatisfiedUsers) {
-			DissatisfiedUsersDTO dto = new DissatisfiedUsersDTO();
+			UserSatisfactionDTO dto = new UserSatisfactionDTO();
 			dto.setUser(RegistrationDTOConverter.convertToDTO(userInfo.getUser()));
 			for (Activity userActivity : userInfo.getActivities()) {
 				dto.getActivities().add(ActivityDTOConverter.convertToDTO(userActivity));
@@ -113,7 +113,7 @@ public class ReportService {
 		return dissatisfiedUsersList;
 	}
 
-	public Set<DissatisfiedUsersDTO> getSatisfiedUsers() {
+	public Set<UserSatisfactionDTO> getSatisfiedUsers() {
 		// inserting facts
 		KieSession kSession = droolsService.getKieContainer().newKieSession("rulesSession");
 		List<User> users = userRepository.findAll();
@@ -133,9 +133,9 @@ public class ReportService {
 		kSession.fireAllRules();
 
 		// result
-		Set<DissatisfiedUsersDTO> satisfiedUsersList = new HashSet<DissatisfiedUsersDTO>();
+		Set<UserSatisfactionDTO> satisfiedUsersList = new HashSet<UserSatisfactionDTO>();
 		for (UserActivitiesDTO userInfo : satisfiedUsers) {
-			DissatisfiedUsersDTO dto = new DissatisfiedUsersDTO();
+			UserSatisfactionDTO dto = new UserSatisfactionDTO();
 			dto.setUser(RegistrationDTOConverter.convertToDTO(userInfo.getUser()));
 			for (Activity userActivity : userInfo.getActivities()) {
 				dto.getActivities().add(ActivityDTOConverter.convertToDTO(userActivity));

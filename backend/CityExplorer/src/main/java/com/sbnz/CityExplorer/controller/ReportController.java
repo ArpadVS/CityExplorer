@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sbnz.CityExplorer.dto.ActivityDTO;
-import com.sbnz.CityExplorer.dto.DissatisfiedUsersDTO;
+import com.sbnz.CityExplorer.dto.UserSatisfactionDTO;
 import com.sbnz.CityExplorer.dto.PopularityDTO;
 import com.sbnz.CityExplorer.dto.RatingRangeDTO;
 import com.sbnz.CityExplorer.service.ReportService;
@@ -36,15 +36,15 @@ public class ReportController {
 	}
 
 	@GetMapping(value = "/getDissatisfiedUsers")
-	public ResponseEntity<Set<DissatisfiedUsersDTO>> getDissatisfiedUsers() {
-		Set<DissatisfiedUsersDTO> dtoList = this.reportService.getDissatisfiedUsers();
-		return new ResponseEntity<Set<DissatisfiedUsersDTO>>(dtoList, HttpStatus.OK);
+	public ResponseEntity<Set<UserSatisfactionDTO>> getDissatisfiedUsers() {
+		Set<UserSatisfactionDTO> dtoList = this.reportService.getDissatisfiedUsers();
+		return new ResponseEntity<Set<UserSatisfactionDTO>>(dtoList, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/getSatisfiedUsers")
-	public ResponseEntity<Set<DissatisfiedUsersDTO>> getSatisfiedUsers() {
-		Set<DissatisfiedUsersDTO> dtoList = this.reportService.getSatisfiedUsers();
-		return new ResponseEntity<Set<DissatisfiedUsersDTO>>(dtoList, HttpStatus.OK);
+	public ResponseEntity<Set<UserSatisfactionDTO>> getSatisfiedUsers() {
+		Set<UserSatisfactionDTO> dtoList = this.reportService.getSatisfiedUsers();
+		return new ResponseEntity<Set<UserSatisfactionDTO>>(dtoList, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/getAlarms")
