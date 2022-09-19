@@ -7,7 +7,6 @@ import java.util.List;
 public class ActivityRequirements {
 
 	private Location location;
-	// need to have prices here because feature only has 1
 	private List<Price> prices;
 	private Features features;
 
