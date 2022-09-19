@@ -21,7 +21,6 @@ public class JwtToken {
 	@Value("${jwt.secret}")
 	private String secret;
 
-	// generate token for user
 	public String generateToken(String username, String role) {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("role", AuthorityUtils.createAuthorityList(role));
@@ -40,12 +39,10 @@ public class JwtToken {
 				.signWith(SignatureAlgorithm.HS512, secret).compact();
 	}
 
-	// retrieve username from jwt token
 	public String getUsernameFromToken(String token) {
 		return getClaimFromToken(token, Claims::getSubject);
 	}
 
-	// Claims: tip parametara funkcije T: tip povratne vrednosti funkcije
 	public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
 		final Claims claims = getAllClaimsFromToken(token);
 		return claimsResolver.apply(claims);
@@ -57,18 +54,15 @@ public class JwtToken {
 		return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
 	}
 
-	// retrieve expiration date from jwt token
 	public Date getExpirationDateFromToken(String token) {
 		return getClaimFromToken(token, Claims::getExpiration);
 	}
 
-	// check if the token has expired
 	private Boolean isTokenExpired(String token) {
 		final Date expiration = getExpirationDateFromToken(token);
 		return expiration.before(new Date());
 	}
 
-	// validate token
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		final String username = getUsernameFromToken(token);
 		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
