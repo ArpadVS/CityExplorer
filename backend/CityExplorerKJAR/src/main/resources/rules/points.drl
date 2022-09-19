@@ -11,14 +11,14 @@ import java.lang.Integer;
 import java.util.*;
 
 global Activity best;
-global ScoreCalculator calc;
+global ScoreCalculator calculator;
 
 declare FoundBest
 end;
 
 rule "Best activity" 
 	agenda-group "recommend"
-	salience(  calc.calculateScore($activity,$req) )
+	salience(  calculator.calculateScore($activity,$req) )
     when
 		$req: ActivityRequirements();
 		$activity: Activity($name: name, $score: score);

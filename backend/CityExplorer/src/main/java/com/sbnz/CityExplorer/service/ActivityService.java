@@ -166,21 +166,21 @@ public class ActivityService {
 		KieSession kieSession = droolsService.getKieContainer().newKieSession("rulesSession");
 		kieSession.getAgenda().getAgendaGroup("recommend").setFocus();
 		kieSession.setGlobal("best", bestScored);
-		kieSession.setGlobal("calc", scoreCalculator);
+		kieSession.setGlobal("calculator", scoreCalculator);
 		kieSession.insert(dto);
 		kieSession.insert(requirements);
-		//ks.insert(sc);
-		for (Activity a : activities) {
-			kieSession.insert(a);
+
+		for (Activity activity : activities) {
+			kieSession.insert(activity);
 		}
 		kieSession.fireAllRules();
 
 		bestScored = (Activity) kieSession.getGlobal("best");
 		ActivityDTO retVal = ActivityDTOConverter.convertToDTO(bestScored);
-		RegisteredUser u = getCurrentUser();
-		if (!u.getRecommendedActivities().contains(bestScored)) {
-			u.getRecommendedActivities().add(bestScored);
-			userRepository.save(u);
+		RegisteredUser currentUser = getCurrentUser();
+		if (!currentUser.getRecommendedActivities().contains(bestScored)) {
+			currentUser.getRecommendedActivities().add(bestScored);
+			userRepository.save(currentUser);
 		}
 		kieSession.destroy();
 		this.droolsService.releaseRulesSession();
