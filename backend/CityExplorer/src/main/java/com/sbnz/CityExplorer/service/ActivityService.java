@@ -79,9 +79,8 @@ public class ActivityService {
 		// getting values from query
 		for (QueryResultsRow queryResult : results) {
 			Activity activity = (Activity) queryResult.get("$activity");
-			// total number of ratings
-			int ratingNum = ((Number) queryResult.get("$ratingNum")).intValue();
-			// sum of every rating
+			
+			int totalRatingNum = ((Number) queryResult.get("$ratingNum")).intValue();
 			int ratingSum = (int) queryResult.get("$ratingSum");
 
 			// total number of 1-2-3-4-5 ratings
@@ -104,10 +103,10 @@ public class ActivityService {
 			}
 			double average = 0;
 			
-			if (ratingNum != 0) {
-				average = ratingSum * 1.0 / ratingNum;
+			if (totalRatingNum != 0) {
+				average = ratingSum * 1.0 / totalRatingNum;
 			}
-			ReportDTO reportDTO = new ReportDTO(average, ratingNum, ones, twos, threes, fours, fives, userReview);
+			ReportDTO reportDTO = new ReportDTO(average, totalRatingNum, ones, twos, threes, fours, fives, userReview);
 			restDTO = ActivityDTOConverter.convertToDTO(activity, reportDTO);
 		}
 		return restDTO;
