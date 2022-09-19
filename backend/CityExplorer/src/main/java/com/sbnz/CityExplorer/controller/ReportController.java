@@ -49,7 +49,7 @@ public class ReportController {
 
 	@GetMapping(value = "/getAlarms")
 	public ResponseEntity<List<ActivityDTO>> getAlarms() {
-		List<ActivityDTO> activities = reportService.getAlarms();
+		List<ActivityDTO> activities = reportService.getAlarmedActivities();
 		return new ResponseEntity<List<ActivityDTO>>(activities, HttpStatus.OK);
 	}
 

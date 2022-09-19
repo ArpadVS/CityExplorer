@@ -35,7 +35,7 @@ public class ReportService {
 	@Autowired
 	UserRepository userRepository;
 
-	public List<ActivityDTO> getAlarms() {
+	public List<ActivityDTO> getAlarmedActivities() {
 		List<Activity> alarmedActivities = activityRepository.findAlarmedActivities();
 		List<ActivityDTO> activityDTOs = new ArrayList<ActivityDTO>();
 		
