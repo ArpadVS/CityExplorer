@@ -81,6 +81,15 @@ public class ReportService {
 	}
 
 	public Set<UserSatisfactionDTO> getDissatisfiedUsers() {
+		return getUserSatisfactionReports("DISSATISFIED");
+	}
+
+
+	public Set<UserSatisfactionDTO> getSatisfiedUsers() {
+		return getUserSatisfactionReports("SATISFIED");
+	}
+
+	public Set<UserSatisfactionDTO> getUserSatisfactionReports( String mode ) {
 		// inserting facts
 		KieSession kSession = droolsService.getKieContainer().newKieSession("rulesSession");
 		List<User> users = userRepository.findAll();
@@ -93,57 +102,33 @@ public class ReportService {
 			}
 		}
 		
-		List<UserActivitiesDTO> dissatisfiedUsers = new ArrayList<UserActivitiesDTO>();
-		// globals
-		kSession.setGlobal("dissatisfiedUsers", dissatisfiedUsers);
-		kSession.getAgenda().getAgendaGroup("dissatisfied").setFocus();
-		kSession.fireAllRules();
-
-		// result
-		Set<UserSatisfactionDTO> dissatisfiedUsersResult = new HashSet<UserSatisfactionDTO>();
-		for (UserActivitiesDTO userInfo : dissatisfiedUsers) {
-			UserSatisfactionDTO dto = new UserSatisfactionDTO();
-			dto.setUser(RegistrationDTOConverter.convertToDTO(userInfo.getUser()));
-			for (Activity userActivity : userInfo.getActivities()) {
-				dto.getActivities().add(ActivityDTOConverter.convertToDTO(userActivity));
-			}
-			dissatisfiedUsersResult.add(dto);
-		}
-		kSession.destroy();
-		return dissatisfiedUsersResult;
-	}
-
-	public Set<UserSatisfactionDTO> getSatisfiedUsers() {
-		// inserting facts
-		KieSession kSession = droolsService.getKieContainer().newKieSession("rulesSession");
-		List<User> users = userRepository.findAll();
-		for (User user : users) {
-			if (user instanceof RegisteredUser) {
-				RegisteredUser registeredUser = (RegisteredUser) user;
-				System.out.println("\t\tInserted: " + user.getUsername() + " with " + registeredUser.getRecommendedActivities().size()
-						+ " recommended.");
-				kSession.insert(registeredUser);
-			}
+		String globalName, agendaName;
+		if (mode.equals("SATISFIED")) {
+			globalName = "satisfiedUsers";
+			agendaName = "satisfied";
+		} else {
+			globalName = "dissatisfiedUsers";
+			agendaName = "dissatisfied";
 		}
 		
-		List<UserActivitiesDTO> satisfiedUsers = new ArrayList<UserActivitiesDTO>();
+		List<UserActivitiesDTO> resultUsers = new ArrayList<UserActivitiesDTO>();
 		// globals
-		kSession.setGlobal("satisfiedUsers", satisfiedUsers);
-		kSession.getAgenda().getAgendaGroup("satisfied").setFocus();
+		kSession.setGlobal(globalName, resultUsers);
+		kSession.getAgenda().getAgendaGroup(agendaName).setFocus();
 		kSession.fireAllRules();
 
 		// result
-		Set<UserSatisfactionDTO> satisfiedUsersResult = new HashSet<UserSatisfactionDTO>();
-		for (UserActivitiesDTO userInfo : satisfiedUsers) {
+		Set<UserSatisfactionDTO> resultUserDTOs = new HashSet<UserSatisfactionDTO>();
+		for (UserActivitiesDTO userInfo : resultUsers) {
 			UserSatisfactionDTO dto = new UserSatisfactionDTO();
 			dto.setUser(RegistrationDTOConverter.convertToDTO(userInfo.getUser()));
 			for (Activity userActivity : userInfo.getActivities()) {
 				dto.getActivities().add(ActivityDTOConverter.convertToDTO(userActivity));
 			}
-			satisfiedUsersResult.add(dto);
+			resultUserDTOs.add(dto);
 		}
 		kSession.destroy();
-		return satisfiedUsersResult;
+		return resultUserDTOs;
 	}
 
 	public List<ActivityDTO> getActivitiesByRatingRange(RatingRangeDTO dto) {
