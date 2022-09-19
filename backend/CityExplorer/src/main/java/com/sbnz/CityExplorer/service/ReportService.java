@@ -36,17 +36,17 @@ public class ReportService {
 	UserRepository userRepository;
 
 	public List<ActivityDTO> getAlarms() {
-		List<Activity> alarmed = activityRepository.findAlarmedActivities();
-		List<ActivityDTO> dtos = new ArrayList<ActivityDTO>();
+		List<Activity> alarmedActivities = activityRepository.findAlarmedActivities();
+		List<ActivityDTO> activityDTOs = new ArrayList<ActivityDTO>();
 		
-		for (Activity a : alarmed) {
-			ActivityDTO asd = ActivityDTOConverter.convertToDTO(a);
-			asd.setReport(new ReportDTO());
-			asd.getReport().setNumOfRatings(a.getRatings().size());
-			dtos.add(asd);
+		for (Activity activity : alarmedActivities) {
+			ActivityDTO dto = ActivityDTOConverter.convertToDTO(activity);
+			dto.setReport(new ReportDTO());
+			dto.getReport().setNumOfRatings(activity.getRatings().size());
+			activityDTOs.add(dto);
 		}
 		
-		return dtos;
+		return activityDTOs;
 	}
 
 	public PopularityDTO getPopularityReport() {
