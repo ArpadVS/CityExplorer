@@ -93,7 +93,7 @@ public class ActivityService {
 
 			// checking if current user already gave a rating
 			int userReview = 0;
-			RegisteredUser loggedUser = getCurrentUser();
+			RegisteredUser loggedUser = getCurrentRegisteredUser();
 			if (loggedUser != null) {
 				for (Rating rating : activity.getRatings()) {
 					if (rating.getRegisteredUser().getId() == loggedUser.getId()) {
@@ -113,7 +113,7 @@ public class ActivityService {
 		return restDTO;
 	}
 
-	private RegisteredUser getCurrentUser() {
+	private RegisteredUser getCurrentRegisteredUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken) && authentication != null) {
 			String username = authentication.getName();
@@ -177,7 +177,7 @@ public class ActivityService {
 
 		bestScored = (Activity) kieSession.getGlobal("best");
 		ActivityDTO retVal = ActivityDTOConverter.convertToDTO(bestScored);
-		RegisteredUser currentUser = getCurrentUser();
+		RegisteredUser currentUser = getCurrentRegisteredUser();
 		if (!currentUser.getRecommendedActivities().contains(bestScored)) {
 			currentUser.getRecommendedActivities().add(bestScored);
 			userRepository.save(currentUser);
@@ -189,7 +189,7 @@ public class ActivityService {
 
 	public boolean rateActivity(RatingDTO dto) {
 		Activity activity = activityRepository.findById(dto.getActivityId()).get();
-		RegisteredUser logged = getCurrentUser();
+		RegisteredUser logged = getCurrentRegisteredUser();
 
 		// User can rate only when something already recommended-checking that
 		boolean alreadyRecommended = false;
