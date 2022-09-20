@@ -110,7 +110,7 @@ public class ReportService {
 			globalName = "dissatisfiedUsers";
 			agendaName = "dissatisfied";
 		}
-		
+
 		List<UserActivitiesDTO> resultUsers = new ArrayList<UserActivitiesDTO>();
 		// globals
 		kSession.setGlobal(globalName, resultUsers);
@@ -133,8 +133,7 @@ public class ReportService {
 
 	public List<ActivityDTO> getActivitiesByRatingRange(RatingRangeDTO dto) {
 		// Creating KieSession and inserting rule from template
-		InputStream template = ReportService.class
-				.getResourceAsStream("/templates/getActivitiesByRatingRange.drt");
+		InputStream template = ReportService.class.getResourceAsStream("/templates/getActivitiesByRatingRange.drt");
 		ObjectDataCompiler converter = new ObjectDataCompiler();
 		List<RatingRangeDTO> data = new ArrayList<RatingRangeDTO>();
 		data.add(dto);

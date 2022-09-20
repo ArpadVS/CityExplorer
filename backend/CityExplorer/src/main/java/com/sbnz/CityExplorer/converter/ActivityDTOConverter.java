@@ -20,15 +20,15 @@ public class ActivityDTOConverter {
 		dto.setId(activity.getId());
 		dto.setName(activity.getName());
 		dto.setDescription(activity.getDescription());
-		if(activity.getLocation()!= null) {
+		if (activity.getLocation() != null) {
 			dto.setLocation(activity.getLocation().toString());
 		}
 		dto.setAddress(activity.getAddress());
 		dto.setImageUrl(activity.getImageUrl());
-		if(activity.getAverage() != null) {
+		if (activity.getAverage() != null) {
 			dto.setAverageRating(activity.getAverage());
 		}
-		if(activity.getAlarm()!= null) {
+		if (activity.getAlarm() != null) {
 			dto.setAlarmCreation(Date.valueOf(activity.getAlarm()));
 		}
 		if (activity.getFeatures() != null) {
@@ -59,7 +59,7 @@ public class ActivityDTOConverter {
 		dto.setReport(reportDTO);
 		return dto;
 	}
-	
+
 	public static Activity convertFromDTO(ActivityDTO dto) {
 		Activity a = new Activity();
 		a.setName(dto.getName());
@@ -69,7 +69,7 @@ public class ActivityDTOConverter {
 		a.setImageUrl(dto.getImageUrl());
 		a.setAverage(0.0);
 		a.setScore(0);
-		
+
 		Features f = new Features();
 		f.setParking(dto.getFeatures().isParking());
 		f.setBusNearby(dto.getFeatures().isBusNearby());
@@ -80,9 +80,10 @@ public class ActivityDTOConverter {
 		f.setOutdoor(dto.getFeatures().isOutdoor());
 		f.setSpace(Space.StringToEnum(dto.getFeatures().getSpace()));
 		f.setPrice(Price.StringToEnum(dto.getFeatures().getPrice().toString()));
-		f.setKeywords(dto.getFeatures().getKeywords().stream().map(keywords -> Keywords.StringToEnum(keywords)).collect(Collectors.toSet()));
+		f.setKeywords(dto.getFeatures().getKeywords().stream().map(keywords -> Keywords.StringToEnum(keywords))
+				.collect(Collectors.toSet()));
 		a.setFeatures(f);
 		return a;
 	}
-	
+
 }

@@ -54,7 +54,7 @@ public class ActivityService {
 			return dto;
 		})).collect(Collectors.toList());
 	}
-	
+
 	public boolean saveActivity(ActivityDTO dto) {
 		Activity activity = ActivityDTOConverter.convertFromDTO(dto);
 		System.out.println(activity.toString() + "created");
@@ -79,7 +79,7 @@ public class ActivityService {
 		// getting values from query
 		for (QueryResultsRow queryResult : results) {
 			Activity activity = (Activity) queryResult.get("$activity");
-			
+
 			int totalRatingNum = ((Number) queryResult.get("$ratingNum")).intValue();
 			int ratingSum = (int) queryResult.get("$ratingSum");
 
@@ -102,7 +102,7 @@ public class ActivityService {
 				}
 			}
 			double average = 0;
-			
+
 			if (totalRatingNum != 0) {
 				average = ratingSum * 1.0 / totalRatingNum;
 			}
@@ -119,7 +119,7 @@ public class ActivityService {
 			try {
 				return (RegisteredUser) userRepository.findOneByUsername(username);
 			} catch (ClassCastException e) {
-				//return null if admin
+				// return null if admin
 				return null;
 			}
 		}
