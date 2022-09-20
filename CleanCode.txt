@@ -1,0 +1,2 @@
+These are a few concepts that are already used in this project: 
+CleanCode: Chapter 6 - Data Transfer Object
