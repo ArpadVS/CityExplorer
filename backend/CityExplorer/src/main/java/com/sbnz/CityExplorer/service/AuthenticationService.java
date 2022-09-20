@@ -75,6 +75,11 @@ public class AuthenticationService {
 		return user;
 	}
 
+	public UserDTO whoAmI() {
+		UserDTO dto = new UserDTO(getCurrentUser());
+		return dto;
+	}
+
 	private User getCurrentUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken) && authentication != null) {
@@ -82,11 +87,6 @@ public class AuthenticationService {
 			return userRepository.findOneByUsername(username);
 		}
 		return null;
-	}
-
-	public UserDTO whoAmI() {
-		UserDTO dto = new UserDTO(getCurrentUser());
-		return dto;
 	}
 
 }

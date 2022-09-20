@@ -112,20 +112,6 @@ public class ActivityService {
 		return restDTO;
 	}
 
-	private RegisteredUser getCurrentRegisteredUser() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (!(authentication instanceof AnonymousAuthenticationToken) && authentication != null) {
-			String username = authentication.getName();
-			try {
-				return (RegisteredUser) userRepository.findOneByUsername(username);
-			} catch (ClassCastException e) {
-				// return null if admin
-				return null;
-			}
-		}
-		return null;
-	}
-
 	public List<ActivityDTO> search(SearchDTO searchDto) {
 		List<Activity> activities = activityRepository.findAll();
 		System.out.println("Number of activities before search = " + activities.size());
@@ -233,5 +219,19 @@ public class ActivityService {
 			System.out.println("Can't rate activity which was not recommended before");
 		}
 		return alreadyRecommended;
+	}
+
+	private RegisteredUser getCurrentRegisteredUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken) && authentication != null) {
+			String username = authentication.getName();
+			try {
+				return (RegisteredUser) userRepository.findOneByUsername(username);
+			} catch (ClassCastException e) {
+				// return null if admin
+				return null;
+			}
+		}
+		return null;
 	}
 }
