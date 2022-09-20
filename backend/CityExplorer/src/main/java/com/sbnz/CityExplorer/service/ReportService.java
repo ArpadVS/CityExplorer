@@ -52,6 +52,7 @@ public class ReportService {
 	public PopularityDTO getPopularityReport() {
 		KieSession kSession = droolsService.getKieContainer().newKieSession("rulesSession");
 		List<User> users = userRepository.findAll();
+		
 		for (User user : users) {
 			if (user instanceof RegisteredUser) {
 				kSession.insert((RegisteredUser) user);
@@ -137,10 +138,11 @@ public class ReportService {
 		KieSession kieSession = droolsService.createKieSessionFromDRL(drl);
 
 		// Application of rules and collecting result
-		List<Activity> result = new ArrayList<>();
 		for (Activity activity : activityRepository.findAll()) {
 			kieSession.insert(activity);
 		}
+
+		List<Activity> result = new ArrayList<>();
 		kieSession.setGlobal("result", result);
 		kieSession.fireAllRules();
 		return (result.stream().map(activity -> {
