@@ -60,12 +60,11 @@ public class AuthenticationService {
 	}
 
 	public RegisteredUser register(RegistrationDTO dto) {
-		// check username
 		if (userRepository.findOneByUsername(dto.getUsername()) != null) {
 			System.out.println("Username taken.");
 			return null;
 		}
-		// check email
+
 		if (userRepository.findOneByEmail(dto.getEmail()) != null) {
 			System.out.println("Email already exists.");
 			return null;

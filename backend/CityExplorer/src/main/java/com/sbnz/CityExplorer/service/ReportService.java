@@ -50,8 +50,6 @@ public class ReportService {
 	}
 
 	public PopularityDTO getPopularityReport() {
-
-		// inserting facts
 		KieSession kSession = droolsService.getKieContainer().newKieSession("rulesSession");
 		List<User> users = userRepository.findAll();
 		for (User user : users) {
@@ -63,14 +61,14 @@ public class ReportService {
 		for (Activity activity : activities) {
 			kSession.insert(activity);
 		}
-		// initiating globals
+
 		Activity mostRecommendedActivity = null;
 		Activity leastRecommendedActivity = null;
 		kSession.setGlobal("mostRecommendedActivity", mostRecommendedActivity);
 		kSession.setGlobal("leastRecommendedActivity", leastRecommendedActivity);
 		kSession.getAgenda().getAgendaGroup("popularity").setFocus();
 		kSession.fireAllRules();
-		// result
+
 		mostRecommendedActivity = (Activity) kSession.getGlobal("mostRecommendedActivity");
 		leastRecommendedActivity = (Activity) kSession.getGlobal("leastRecommendedActivity");
 		
@@ -90,7 +88,6 @@ public class ReportService {
 	}
 
 	public Set<UserSatisfactionDTO> getUserSatisfactionReports( String mode ) {
-		// inserting facts
 		KieSession kSession = droolsService.getKieContainer().newKieSession("rulesSession");
 		List<User> users = userRepository.findAll();
 		for (User user : users) {
@@ -112,12 +109,10 @@ public class ReportService {
 		}
 
 		List<UserActivitiesDTO> resultUsers = new ArrayList<UserActivitiesDTO>();
-		// globals
 		kSession.setGlobal(globalName, resultUsers);
 		kSession.getAgenda().getAgendaGroup(agendaName).setFocus();
 		kSession.fireAllRules();
 
-		// result
 		Set<UserSatisfactionDTO> resultUserDTOs = new HashSet<UserSatisfactionDTO>();
 		for (UserActivitiesDTO userInfo : resultUsers) {
 			UserSatisfactionDTO dto = new UserSatisfactionDTO();
