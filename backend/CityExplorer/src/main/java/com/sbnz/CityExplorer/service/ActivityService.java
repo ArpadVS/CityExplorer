@@ -103,7 +103,7 @@ public class ActivityService {
 		return restDTO;
 	}
 	
-	public int getUserRating(Activity activity) {
+	private int getUserRating(Activity activity) {
 		int userRating = 0;
 		try {
 			RegisteredUser loggedUser = getCurrentRegisteredUser();
@@ -174,7 +174,7 @@ public class ActivityService {
 		return retVal;
 	}
 	
-	public void saveRecommendedActivity(Activity activity) {
+	private void saveRecommendedActivity(Activity activity) {
 		try {
 			RegisteredUser currentUser = getCurrentRegisteredUser();
 			if (!currentUser.getRecommendedActivities().contains(activity)) {
