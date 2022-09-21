@@ -25,6 +25,7 @@ import com.sbnz.CityExplorer.dto.ReportDTO;
 import com.sbnz.CityExplorer.dto.SearchDTO;
 import com.sbnz.CityExplorer.dto.UserRequirementsDTO;
 import com.sbnz.CityExplorer.events.RatingEvent;
+import com.sbnz.CityExplorer.exception.NotRegisteredUserException;
 import com.sbnz.CityExplorer.model.Activity;
 import com.sbnz.CityExplorer.model.ActivityRequirements;
 import com.sbnz.CityExplorer.model.Rating;
@@ -90,17 +91,7 @@ public class ActivityService {
 			int fours = ((Number) queryResult.get("$fours")).intValue();
 			int fives = ((Number) queryResult.get("$fives")).intValue();
 
-			// checking if current user already gave a rating
-			int userReview = 0;
-			RegisteredUser loggedUser = getCurrentRegisteredUser();
-			if (loggedUser != null) {
-				for (Rating rating : activity.getRatings()) {
-					if (rating.getRegisteredUser().getId() == loggedUser.getId()) {
-						userReview = rating.getRating();
-						break;
-					}
-				}
-			}
+			int userReview = getUserRating(activity);
 			double average = 0;
 
 			if (totalRatingNum != 0) {
@@ -110,6 +101,21 @@ public class ActivityService {
 			restDTO = ActivityDTOConverter.convertToDTO(activity, reportDTO);
 		}
 		return restDTO;
+	}
+	
+	public int getUserRating(Activity activity) {
+		int userRating = 0;
+		try {
+			RegisteredUser loggedUser = getCurrentRegisteredUser();
+			for (Rating rating : activity.getRatings()) {
+				if (rating.getRegisteredUser().getId() == loggedUser.getId()) {
+					userRating = rating.getRating();
+				}
+			}
+		} catch (NotRegisteredUserException e) {
+			System.out.println(e.getMessage());
+		} 
+		return userRating;
 	}
 
 	public List<ActivityDTO> search(SearchDTO searchDto) {
@@ -161,18 +167,30 @@ public class ActivityService {
 		kieSession.fireAllRules();
 
 		bestScored = (Activity) kieSession.getGlobal("best");
+		saveRecommendedActivity(bestScored);
 		ActivityDTO retVal = ActivityDTOConverter.convertToDTO(bestScored);
-		RegisteredUser currentUser = getCurrentRegisteredUser();
-		if (!currentUser.getRecommendedActivities().contains(bestScored)) {
-			currentUser.getRecommendedActivities().add(bestScored);
-			userRepository.save(currentUser);
-		}
 		kieSession.destroy();
 		this.droolsService.releaseRulesSession();
 		return retVal;
 	}
+	
+	public void saveRecommendedActivity(Activity activity) {
+		try {
+			RegisteredUser currentUser = getCurrentRegisteredUser();
+			if (!currentUser.getRecommendedActivities().contains(activity)) {
+				currentUser.getRecommendedActivities().add(activity);
+				userRepository.save(currentUser);
+			}
+		} catch (NotRegisteredUserException e){
+			System.out.println(e.getMessage());
+		}catch (Exception e) {
+			System.out.println("An unexpected error occured");
+			e.printStackTrace();
+  
+		}
+	}
 
-	public boolean rateActivity(RatingDTO dto) {
+	public boolean rateActivity(RatingDTO dto) throws NotRegisteredUserException {
 		Activity activity = activityRepository.findById(dto.getActivityId()).get();
 		RegisteredUser logged = getCurrentRegisteredUser();
 
@@ -221,15 +239,14 @@ public class ActivityService {
 		return alreadyRecommended;
 	}
 
-	private RegisteredUser getCurrentRegisteredUser() {
+	private RegisteredUser getCurrentRegisteredUser() throws NotRegisteredUserException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken) && authentication != null) {
 			String username = authentication.getName();
 			try {
 				return (RegisteredUser) userRepository.findOneByUsername(username);
 			} catch (ClassCastException e) {
-				// return null if admin
-				return null;
+				throw new NotRegisteredUserException("Logged in user is not RegisteredUser");
 			}
 		}
 		return null;

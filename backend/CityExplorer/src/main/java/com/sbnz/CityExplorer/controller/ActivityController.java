@@ -18,6 +18,7 @@ import com.sbnz.CityExplorer.dto.ActivityDTO;
 import com.sbnz.CityExplorer.dto.RatingDTO;
 import com.sbnz.CityExplorer.dto.SearchDTO;
 import com.sbnz.CityExplorer.dto.UserRequirementsDTO;
+import com.sbnz.CityExplorer.exception.NotRegisteredUserException;
 import com.sbnz.CityExplorer.service.ActivityService;
 
 @RestController
@@ -62,7 +63,7 @@ public class ActivityController {
 
 	@PostMapping(value = "/rate")
 	@PreAuthorize("hasAuthority('ROLE_REGISTERED_USER')")
-	public ResponseEntity<Boolean> rateActivity(@RequestBody RatingDTO dto) {
+	public ResponseEntity<Boolean> rateActivity(@RequestBody RatingDTO dto) throws NotRegisteredUserException {
 		boolean result = activityService.rateActivity(dto);
 		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
 	}
