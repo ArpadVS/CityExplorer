@@ -1,3 +1,4 @@
 These are a few concepts that are already used in this project: 
 CleanCode: Chapter 6 - Data Transfer Object
 CleanCode: Chapter 10 - The Single Responsibility Principle
+CleanCode: Chapter 11 - Dependency injection => using everywhere because of Spring ( services, repositories, controllers..)
