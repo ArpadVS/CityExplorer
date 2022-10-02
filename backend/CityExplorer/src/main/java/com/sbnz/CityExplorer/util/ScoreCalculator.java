@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.sbnz.CityExplorer.model.Activity;
 import com.sbnz.CityExplorer.model.ActivityRequirements;
+import com.sbnz.CityExplorer.model.Features;
 import com.sbnz.CityExplorer.model.Keywords;
 import com.sbnz.CityExplorer.model.Location;
 import com.sbnz.CityExplorer.model.RegisteredUser;
@@ -31,6 +32,8 @@ public class ScoreCalculator {
 		}
 		System.out.println("Calculating score for " + activity.getName());
 		
+		Features activityFeatures= activity.getFeatures();
+		Features requirementFeatures = requirements.getFeatures();
 		int score = 0;
 		
 		if(activity.getAverage() != null) {
@@ -38,13 +41,13 @@ public class ScoreCalculator {
 			score += (int)Math.round(activity.getAverage());
 		}
 		
-		if(requirements.getPrices().contains(activity.getFeatures().getPrice())) {
+		if(requirements.getPrices().contains(activityFeatures.getPrice())) {
 			System.out.println("PRICE \t");
 			score += 4;
 		}
 
-		for (Keywords req : requirements.getFeatures().getKeywords()) {
-			if (activity.getFeatures().getKeywords().contains(req)) {
+		for (Keywords req : requirementFeatures.getKeywords()) {
+			if (activityFeatures.getKeywords().contains(req)) {
 				switch (req) {
 				case ADRENALINE:
 				case SPORT:
@@ -61,31 +64,31 @@ public class ScoreCalculator {
 			}
 		}
 		
-		if(requirements.getFeatures().isBusNearby() && activity.getFeatures().isBusNearby()) {
+		if(requirementFeatures.isBusNearby() && activityFeatures.isBusNearby()) {
 			System.out.println("BUS \t");
 			score += 1;
 		}
-		if(requirements.getFeatures().isChildrensProgram() && activity.getFeatures().isChildrensProgram()) {
+		if(requirementFeatures.isChildrensProgram() && activityFeatures.isChildrensProgram()) {
 			System.out.println("CHILDREN \t");
 			score += 1;
 		}
-		if(requirements.getFeatures().isOutdoor() && activity.getFeatures().isOutdoor()) {
+		if(requirementFeatures.isOutdoor() && activityFeatures.isOutdoor()) {
 			System.out.println("OUTDOOR \t");
 			score += 2;
 		}
-		if(requirements.getFeatures().isParking() && activity.getFeatures().isParking()) {
+		if(requirementFeatures.isParking() && activityFeatures.isParking()) {
 			System.out.println("PARKING \t");
 			score += 1;
 		}
-		if(requirements.getFeatures().isReservations() && activity.getFeatures().isReservations()) {
+		if(requirementFeatures.isReservations() && activityFeatures.isReservations()) {
 			System.out.println("RESERVATIONS \t");
 			score += 1;
 		}
-		if(requirements.getFeatures().isTv() && activity.getFeatures().isTv()) {
+		if(requirementFeatures.isTv() && activityFeatures.isTv()) {
 			System.out.println("TV \t");
 			score += 1;
 		}
-		if(requirements.getFeatures().isWifi() && activity.getFeatures().isWifi()) {
+		if(requirementFeatures.isWifi() && activityFeatures.isWifi()) {
 			System.out.println("WIFI \t");
 			score += 1;
 		}
@@ -108,8 +111,8 @@ public class ScoreCalculator {
 			}
 		}
 		
-		if((requirements.getFeatures().getSpace() != null )
-				&& requirements.getFeatures().getSpace() == activity.getFeatures().getSpace()) {
+		if((requirementFeatures.getSpace() != null )
+				&& requirementFeatures.getSpace() == activityFeatures.getSpace()) {
 			score += 2;
 		}
 		
